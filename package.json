@@ -1,0 +1,6 @@
+{
+	"name": "language-fontforge",
+	"version": "0.0.1",
+	"description": "Syntax highlighting for FontForge's built-in scripting language",
+	"engines": {"atom": "*"}
+}
