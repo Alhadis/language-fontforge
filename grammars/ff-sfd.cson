@@ -1,7 +1,7 @@
 name: "Spline Font Database"
+scopeName: "text.sfd"
 fileTypes: ["sfd"]
 firstLineMatch: "^SplineFontDB: [\\d.]+"
-scopeName: "text.sfd"
 patterns: [include: "#main"]
 
 repository:
