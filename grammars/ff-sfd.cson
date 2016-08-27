@@ -10,6 +10,7 @@ repository:
 			{include: "#punctuation"}
 			{include: "#private"}
 			{include: "#image"}
+			{include: "#pickleData"}
 			{include: "#sections"}
 			{include: "#copyright"}
 			{include: "#property"}
@@ -47,6 +48,18 @@ repository:
 			2: patterns: [include: "$self"]
 		endCaptures:
 			1: name: "keyword.control.end.image.sfd"
+
+	pickleData:
+		name: "meta.pickle-data.sfd"
+		begin: "^(PickledData)(:)\\s*(\")"
+		end:   '"'
+		beginCaptures:
+			1: name: "entity.name.property.sfd"
+			2: name: "punctuation.separator.dictionary.key-value.sfd"
+			3: name: "punctuation.definition.string.begin.sfd"
+		endCaptures:
+			0: name: "punctuation.definition.string.end.sfd"
+		patterns: [match: "\\\\.", name: "constant.character.escape.sfd"]
 
 	sections:
 		name: "meta.section.${2:/downcase}.sfd"
