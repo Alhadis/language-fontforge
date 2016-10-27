@@ -2,7 +2,7 @@
 	"name": "language-fontforge",
 	"version": "1.0.0",
 	"description": "Syntax highlighting for Spline Font Database files and FontForge's built-in scripting language.",
-	"keywords": ["FontForge", "pfaedit", "SFD", "Spline Font Database", "fonts", "OpenType"],
+	"keywords": ["FontForge", "pfaedit", "SFD", "Spline Font Database", "fonts", "TrueType", "OpenType", "Feature File"],
 	"repository": "https://github.com/Alhadis/language-fontforge",
 	"license": "ISC",
 	"engines": {

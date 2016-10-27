@@ -1,3 +1,7 @@
 ".source.fontforge":
 	editor:
 		commentStart: "# "
+
+".source.opentype":
+	editor:
+		commentStart: "# "
