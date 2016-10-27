@@ -6,7 +6,7 @@ FontForge's [built-in scripting language][2].
 
 ![Because I can't stand Python][3]
 
-Support for [OpenType feature files][4] was also included in v1.1:
+As of v1.1, also includes support for [OpenType feature files][4] (`.fea`):
 
 ![Just because][5]
 
