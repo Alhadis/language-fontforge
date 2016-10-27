@@ -239,9 +239,9 @@ repository:
 				|fwid|half|haln|halt|hist|hkna|hlig|hngl|hojo|hwid|init|isol|ital|jalt|jp78|jp83|jp90
 				|jp04|kern|lfbd|liga|ljmo|lnum|locl|ltra|ltrm|mark|med2|medi|mgrk|mkmk|mset|nalt|nlck
 				|nukt|numr|onum|opbd|ordn|ornm|palt|pcap|pkna|pnum|pref|pres|pstf|psts|pwid|qwid|rand
-				|rclt|rkrf|rlig|rphf|rtbd|rtla|rtlm|ruby|salt|sinf|size|smcp|smpl|ss[0-9]{2}|ssty|stch
-				|subs|sups|swsh|titl|tjmo|tnam|tnum|trad|twid|unic|valt|vatu|vert|vhal|vjmo|vkna|vkrn
-				|vpal|vrt2|zero)
+				|rclt|rkrf|rlig|rphf|rtbd|rtla|rtlm|ruby|rvrn|salt|sinf|size|smcp|smpl|ss[0-9]{2}|ssty
+				|stch|subs|sups|swsh|titl|tjmo|tnam|tnum|trad|twid|unic|valt|vatu|vert|vhal|vjmo|vkna
+				|vkrn|vpal|vrt2|vrtr|zero)
 				(?=[\\s#;]|$)"""
 		},{
 			# Scripts
