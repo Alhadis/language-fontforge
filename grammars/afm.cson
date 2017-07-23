@@ -246,7 +246,7 @@ repository:
 		},{
 			# Number-typed properties
 			name:  "meta.metadata.${1:/downcase}.afm"
-			begin: "^(CharWidth|VVector|Masters|Axes)(?=\\s|$)"
+			begin: "^(CharWidth|VVector|Masters|Axes|Std[HV]W)(?=\\s|$)"
 			end:   "^|$"
 			patterns: [include: "#paramNumbers"]
 			beginCaptures:
