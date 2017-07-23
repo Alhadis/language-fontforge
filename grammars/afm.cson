@@ -16,6 +16,7 @@ repository:
 			{include: "#globalInfo"}
 			{include: "#kerningData"}
 			{include: "#charMetrics"}
+			{include: "#compositesData"}
 		]
 
 
@@ -33,6 +34,12 @@ repository:
 		beginCaptures:
 			0: name: "keyword.operator.start-comment.afm"
 
+
+	# Semicolon separating each column
+	delimiter:
+		name: "punctuation.delimiter.metrics.semicolon.afm"
+		match: ";"
+	
 
 	# Hexadecimal value
 	hex:
@@ -211,10 +218,7 @@ repository:
 	# Patterns matched inside a character-metrics row
 	charMetricInnards:
 		patterns: [{
-			
-			# Semicolon separating each column
-			name: "punctuation.delimiter.metrics.semicolon.afm"
-			match: ";"
+			include: "#delimiter"
 		},{
 			# Character code: Hexadecimal
 			name: "meta.character.code.hexadecimal.afm"
@@ -270,9 +274,41 @@ repository:
 		}]
 	
 	
+	compositesData:
+		name:  "meta.composites.afm"
+		begin: "^(StartComposites)(?:\\s+([-+]?\\d+))?\\s*$"
+		end:   "^EndComposites"
+		beginCaptures:
+			1: name: "keyword.control.start.metrics.afm"
+			2: patterns: [include: "#integer"]
+		endCaptures:
+			0: name: "keyword.control.end.metrics.afm"
+		patterns: [
+			{include: "#comment"}
+			name: "meta.composition.afm"
+			begin: "^CC(?=\\s|$|;)"
+			end:   "$"
+			beginCaptures:
+				0: name: "keyword.operator.char-comp.afm"
+			patterns: [{
+				include: "#delimiter"
+			},{
+				match: "\\G\\s+([^;\\s]+)(?:\\s+([-+]?\\d+))?"
+				captures:
+					1: name: "string.unquoted.parameter.identifier.afm"
+					2: patterns: [include: "#integer"]
+			},{
+				match: "(?<=;|\\s)(PCC)\\s+([^;\\s]+)"
+				captures:
+					1: name: "keyword.operator.char-comp.afm"
+					2: name: "string.unquoted.parameter.identifier.afm"
+			}, include: "#numbers"]
+		]
+	
+	
 	# Kerning data
 	kerningData:
-		meta: "meta.kerning-data.afm"
+		name: "meta.kerning-data.afm"
 		begin: "^(StartKernData)\\s*$"
 		end:   "^EndKernData\\s*$"
 		beginCaptures: 1: name: "keyword.control.start.metrics.afm"
