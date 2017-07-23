@@ -13,10 +13,27 @@ repository:
 			{include: "#comment"}
 			{include: "#real"}
 			{include: "#integer"}
+			{include: "#array"}
 			{include: "#globalInfo"}
 			{include: "#kerningData"}
 			{include: "#charMetrics"}
 			{include: "#compositesData"}
+			{include: "#amfmSpecific"}
+			{include: "#direction"}
+			{include: "#primaryFonts"}
+		]
+
+
+	# List of PostScript-ish values enclosed by square-brackets
+	array:
+		begin: "\\["
+		end:   "\\]|(?=$)"
+		beginCaptures: 0: name: "punctuation.definition.list.bracket.square.begin.afm"
+		endCaptures:   0: name: "punctuation.definition.list.bracket.square.end.afm"
+		patterns: [
+			{include: "#array"}
+			{include: "#numbers"}
+			{include: "#psLiteral"}
 		]
 
 
@@ -24,6 +41,16 @@ repository:
 	boolean:
 		name: "constant.language.boolean.$1.afm"
 		match: "(?<!\\w)(true|false)(?!\\w)"
+	
+	
+	# Bracketed string: (Another leaf ripped out of PostScript's book)
+	bracketedString:
+		name: "string.quoted.double.bracketed.afm"
+		begin: "\\("
+		end:   "\\)|(?=$)"
+		beginCaptures: 0: name: "punctuation.definition.bracket.round.begin.afm"
+		endCaptures:   0: name: "punctuation.definition.bracket.round.end.afm"
+		patterns: [include: "#bracketedString"]
 	
 	
 	# Contents of a "Comment" command, discarded by interpreter
@@ -76,6 +103,14 @@ repository:
 		]
 	
 	
+	# /PostScript /literal /string
+	psLiteral:
+		name: "support.language.constant.literal.afm"
+		match: "(/)[^\\s\\[\\];]+"
+		captures:
+			1: name: "punctuation.definition.literal.slash.afm"
+	
+	
 	# Floating-point numbers
 	real:
 		name: "constant.numeric.float.afm"
@@ -123,10 +158,7 @@ repository:
 			name: "meta.revision.afm"
 			begin: "^Version(?=\\s|$)"
 			end:   "^|$"
-			patterns: [{
-				match: "\\G\\s+(\\d+(?:\\.\\d+)?)?\\s*$"
-				name: "constant.numeric.float.decimal.version-number.afm"
-			}, include: "#paramInvalid"]
+			patterns: [include: "#paramString"]
 			beginCaptures:
 				0: name: "keyword.operator.version.afm"
 		},{
@@ -185,6 +217,50 @@ repository:
 			patterns: [include: "#paramNumber"]
 			beginCaptures:
 				0: name: "keyword.operator.${1:/downcase}.afm"
+		},{
+			# String-typed miscellaneous properties
+			name: "meta.metric.${1:/downcase}.afm"
+			begin: "^(CharacterSet|AxisType|AxisLabel)(?=\\s|$)"
+			end:   "^|$"
+			patterns: [include: "#paramString"]
+			beginCaptures:
+				0: name: "keyword.operator.metadata.afm"
+		},{
+			# Other metadata properties with integer-typed parameters
+			name: "meta.metadata.${1:/downcase}.afm"
+			begin: "^(Characters|EscChar|MappingScheme)(?=\\s|$)"
+			end:   "^|$"
+			patterns: [include: "#paramNumber"]
+			beginCaptures:
+				1: name: "keyword.operator.metadata.afm"
+		},{
+			# Other Boolean-typed metadata properties
+			name: "meta.metadata.${1:/downcase}.afm"
+			begin: "^(IsBaseFont|IsFixedV)(?=\\s|$)"
+			end:   "^|$"
+			patterns: [include: "#paramBoolean"]
+			beginCaptures:
+				1: name: "keyword.operator.metadata.afm"
+		},{
+			# Number-typed properties
+			name:  "meta.metadata.${1:/downcase}.afm"
+			begin: "^(CharWidth|VVector|Masters|Axes)(?=\\s|$)"
+			end:   "^|$"
+			patterns: [include: "#paramNumbers"]
+			beginCaptures:
+				1: name: "keyword.operator.metadata.afm"
+		},{
+			# Properties which use/expect arrays (AMFM files)
+			name:  "meta.metadata.${1:/downcase}.afm"
+			begin: "^(WeightVector|BlendDesign(Positions|Map)|BlendAxisTypes)(?=\\s|$)"
+			end:   "^|$"
+			patterns: [
+				{include: "#array"}
+				{include: "#numbers"}
+				{include: "#psLiteral"}
+			]
+			beginCaptures:
+				1: name: "keyword.operator.metadata.afm"
 		}]
 	
 	
@@ -377,6 +453,54 @@ repository:
 		beginCaptures:
 			1: name: "keyword.operator.track-kern.afm"
 	
+	
+	# Section-types specific to AMFM/ACFM files
+	amfmSpecific:
+		name: "meta.${2:/downcase}.afm"
+		begin: "^(Start(Direction|Axis|Master))(?:\\s+([-+]?\\d+))?\\s*$"
+		end:   "^End\\2\\s*$"
+		patterns: [include: "#main"]
+		beginCaptures: 1: name: "keyword.control.start.${2:/downcase}.afm"
+		endCaptures:   0: name: "keyword.control.end.${2:/downcase}.afm"
+	
+	
+	# Character-data list specific to AMFM/ACFM files
+	primaryFonts:
+		name: "meta.primary-fonts.afm"
+		begin: "^(StartPrimaryFonts)(?:\\s+([-+]?\\d+))?\\s*$"
+		end:   "^EndPrimaryFonts\\s*$"
+		beginCaptures:
+			1: name: "keyword.control.start.font-list.afm"
+			2: patterns: [include: "#integer"]
+		endCaptures:
+			0: name: "keyword.control.end.font-list.afm"
+		patterns: [
+			{include: "#comment"}
+			{include: "#delimiter"}
+			{include: "#primaryFontLine"}
+		]
+	
+	
+	# Single font listed inside  `(Start|End)PrimaryFonts` keywords
+	primaryFontLine:
+		begin: "^\\s*"
+		end:   "$"
+		patterns: [{
+			match: "\\G(PC)((?:\\s+[-+]?\\d+)+)"
+			captures:
+				1: name: "variable.assignment.metadata.afm"
+				2: patterns: [include: "#integer"]
+		},{
+			begin: "(?<=\\s|;)(P[LN])\\s+"
+			end:   "(?=;|$)"
+			beginCaptures:
+				1: name: "variable.assignment.metadata.afm"
+			patterns: [
+				{include: "#bracketedString"}
+				{include: "#delimiter"}
+			]
+		}, include: "#delimiter"]
+		
 	
 	# Boolean-typed property
 	paramBoolean:
