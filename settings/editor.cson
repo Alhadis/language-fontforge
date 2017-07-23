@@ -5,3 +5,7 @@
 ".source.opentype":
 	editor:
 		commentStart: "# "
+
+".source.afm":
+	editor:
+		commentStart: "Comment "
