@@ -14,6 +14,7 @@ repository:
 			{include: "#real"}
 			{include: "#integer"}
 			{include: "#globalInfo"}
+			{include: "#kerningData"}
 			{include: "#charMetrics"}
 		]
 
@@ -52,10 +53,16 @@ repository:
 			match: "(?<!\\w)[-+]?\\d+",
 			name: "constant.numeric.integer.decimal.afm"
 		}]
-		
+
+
+	# Identifier/ID
+	name:
+		match: "[^;\\s]+"
+		name: "string.unquoted.parameter.identifier.afm"
+
 	
-	# Numeric values, of any type
-	number:
+	# Numeric values of any type (float/integer)
+	numbers:
 		patterns: [
 			{include: "#real"}
 			{include: "#integer"}
@@ -185,7 +192,8 @@ repository:
 		endCaptures:
 			0: name: "keyword.control.end.metrics.afm"
 		patterns: [{
-			
+			include: "#comment"
+		},{
 			# Metrics for an unlisted character
 			name: "meta.unencoded.character.metrics.afm"
 			begin: "^\\s*(?=C\\s+-\\d)"
@@ -228,7 +236,7 @@ repository:
 			end:   "(?=;|$)"
 			beginCaptures:
 				1: name: "variable.assignment.character-width.afm"
-			patterns: [include: "#number"]
+			patterns: [include: "#numbers"]
 		},{
 			# Character width of a single direction
 			name: "meta.metric.character.width.afm"
@@ -250,7 +258,7 @@ repository:
 			end:   "(?=$|;)"
 			beginCaptures:
 				1: name: "variable.assignment.metric.afm"
-			patterns: [include: "#number"]
+			patterns: [include: "#numbers"]
 		},{
 			# Successor ligature
 			name: "meta.metric.next-ligature.afm"
@@ -258,11 +266,80 @@ repository:
 			end:   "(?=$|;)"
 			beginCaptures:
 				1: name: "variable.assignment.metric.afm"
-			patterns: [{
-				match: "[^;\\s]+"
-				name: "string.unquoted.parameter.identifier.afm"
-			}]
+			patterns: [include: "#name"]
 		}]
+	
+	
+	# Kerning data
+	kerningData:
+		meta: "meta.kerning-data.afm"
+		begin: "^(StartKernData)\\s*$"
+		end:   "^EndKernData\\s*$"
+		beginCaptures: 1: name: "keyword.control.start.metrics.afm"
+		endCaptures:   0: name: "keyword.control.end.metrics.afm"
+		patterns: [{
+			
+			# Track kerning section
+			begin: "^(StartTrackKern)(?:\\s+([-+]?\\d+))?\\s*$"
+			end:   "^EndTrackKern\\s*$"
+			beginCaptures:
+				1: name: "keyword.control.start.metrics.afm"
+				2: patterns: [include: "#integer"]
+			endCaptures:
+				0: name: "keyword.control.end.metrics.afm"
+			patterns: [
+				{include: "#comment"}
+				{include: "#kerningTrack"}
+			]
+		},{
+			# Pair-wise kerning
+			begin: "^(StartKernPairs[0-1]?)(?:\\s+([-+]?\\d+))?\\s*$"
+			end:   "^EndKernPairs\\s*$"
+			beginCaptures:
+				1: name: "keyword.control.start.metrics.afm"
+				2: patterns: [include: "#integer"]
+			endCaptures:
+				0: name: "keyword.control.end.metrics.afm"
+			patterns: [
+				{include: "#comment"}
+				{include: "#kerningPairs"}
+			]
+		}]
+	
+	
+	kerningPairs:
+		patterns: [{
+			name: "meta.kerning-pair.by-codepoint.afm"
+			begin: "^KPH(?=\\s|$)"
+			end:   "^|$"
+			beginCaptures:
+				0: name: "keyword.operator.kern-pair.afm"
+			patterns: [{
+				match: "\\G((?:\\s+<[^>\\s]*>)+)\\s+"
+				captures:
+					1: patterns: [include: "#hex"]
+			}, include: "#numbers"]
+		},{
+			name: "meta.kerning-pair.by-name.afm"
+			begin: "^KP[XY]?(?=\\s|$)"
+			end:   "^|$"
+			beginCaptures:
+				0: name: "keyword.operator.kern-pair.afm"
+			patterns: [{
+				match: "\\G((?:\\s+\\S+){1,2})"
+				captures:
+					1: patterns: [include: "#name"]
+			}, include: "#numbers"]
+		}]
+	
+	
+	# Sequence of track-kerning metrics
+	kerningTrack:
+		begin: "^(TrackKern)(?=\\s|$)"
+		end:   "^|$"
+		patterns: [include: "#numbers"]
+		beginCaptures:
+			1: name: "keyword.operator.track-kern.afm"
 	
 	
 	# Boolean-typed property
