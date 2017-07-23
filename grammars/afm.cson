@@ -13,7 +13,8 @@ repository:
 			{include: "#comment"}
 			{include: "#real"}
 			{include: "#integer"}
-			{include: "#keywords"}
+			{include: "#globalInfo"}
+			{include: "#charMetrics"}
 		]
 
 
@@ -32,17 +33,44 @@ repository:
 			0: name: "keyword.operator.start-comment.afm"
 
 
+	# Hexadecimal value
+	hex:
+		name: "constant.numeric.integer.hexadecimal.afm"
+		match: "(<)(?:[A-Fa-f0-9]+|([^>\\s]+))(>)"
+		captures:
+			1: name: "punctuation.definition.hex.bracket.angle.begin.afm"
+			2: name: "invalid.illegal.syntax.bad-characters.afm"
+			3: name: "punctuation.definition.hex.bracket.angle.end.afm"
+
+
 	# Integer literals
 	integer:
+		patterns: [{
+			match: "(?<!\\w)[-+]?(?=0)\\d+",
+			name: "constant.numeric.integer.octal.afm"
+		},{
+			match: "(?<!\\w)[-+]?\\d+",
+			name: "constant.numeric.integer.decimal.afm"
+		}]
+		
+	
+	# Numeric values, of any type
+	number:
 		patterns: [
-			{match: "(?<!\\w)[-+]?0[Xx][A-Fa-f0-9]+", name: "constant.numeric.integer.hexadecimal.fontforge"}
-			{match: "(?<!\\w)[-+]?(?=0)\\d+",         name: "constant.numeric.integer.octal.fontforge"}
-			{match: "(?<!\\w)[-+]?\\d+",              name: "constant.numeric.integer.decimal.fontforge"}
+			{include: "#real"}
+			{include: "#integer"}
 		]
 	
 	
-	# Language directives
-	keywords:
+	# Floating-point numbers
+	real:
+		name: "constant.numeric.float.afm"
+		match: "(?<!\\w)[-+]?\\d*\\.\\d+"
+	
+	
+	
+	# Global font information
+	globalInfo:
 		patterns: [{
 			
 			# Font names
@@ -136,7 +164,7 @@ repository:
 			beginCaptures:
 				0: name: "keyword.operator.${1:/downcase}-height.afm"
 		},{
-			# Descender/Ascender height
+			# Descender/Ascender length
 			name: "meta.metric.${1:/downcase}.afm"
 			begin: "^(Descender|Ascender)(?=\\s|$)"
 			end:   "^|$"
@@ -145,6 +173,96 @@ repository:
 				0: name: "keyword.operator.${1:/downcase}.afm"
 		}]
 	
+	
+	# Individual character metrics
+	charMetrics:
+		name: "meta.metrics-list.afm"
+		begin: "^(StartCharMetrics)(?:\\s+(\\d+))?\\s*$"
+		end:   "^EndCharMetrics\\s*$"
+		beginCaptures:
+			1: name: "keyword.control.start.metrics.afm"
+			2: name: "constant.numeric.decimal.integer.afm"
+		endCaptures:
+			0: name: "keyword.control.end.metrics.afm"
+		patterns: [{
+			
+			# Metrics for an unlisted character
+			name: "meta.unencoded.character.metrics.afm"
+			begin: "^\\s*(?=C\\s+-\\d)"
+			end:   "$"
+			patterns: [include: "#charMetricInnards"]
+		},{
+			# Individual line of metric data
+			name: "meta.character.metrics.afm"
+			begin: "^\\s*"
+			end:   "$"
+			patterns: [include: "#charMetricInnards"]
+		}]
+	
+	
+	# Patterns matched inside a character-metrics row
+	charMetricInnards:
+		patterns: [{
+			
+			# Semicolon separating each column
+			name: "punctuation.delimiter.metrics.semicolon.afm"
+			match: ";"
+		},{
+			# Character code: Hexadecimal
+			name: "meta.character.code.hexadecimal.afm"
+			match: "\\G(CH)\\s+(<[^>\\s]++>)\\s*(?=;|$)"
+			captures:
+				1: name: "variable.assignment.codepoint.afm"
+				2: patterns: [include: "#hex"]
+		},{
+			# Character code: Decimal
+			name: "meta.character.code.decimal.afm"
+			match: "\\G(C)\\s+([-+]?\\d+)\\s*(?=;|$)"
+			captures:
+				1: name: "variable.assignment.codepoint.afm"
+				2: patterns: [include: "#integer"]
+		},{
+			# Character width of both X and Y dimensions
+			name: "meta.metric.character.width.afm"
+			begin: "(?<=\\s|^|;)(W[01]?|VV)(?=\\s|;|$)"
+			end:   "(?=;|$)"
+			beginCaptures:
+				1: name: "variable.assignment.character-width.afm"
+			patterns: [include: "#number"]
+		},{
+			# Character width of a single direction
+			name: "meta.metric.character.width.afm"
+			match: "(?<=\\s|^|;)(W[01]?(X|Y))(?:\\s+([-+]?[\\d.]+)\\s*)(?=\\s|$|;)"
+			captures:
+				1: name: "variable.assignment.${2:/downcase}-width.afm"
+				3: patterns: [include: "#integer"]
+		},{
+			# PostScript name
+			name: "meta.metric.character.name.afm"
+			match: "(?<=\\s|^|;)(N)(?:\\s+([^;\\s]+))?\\s*(?=\\s|$|;)"
+			captures:
+				1: name: "variable.assignment.character.name.afm"
+				2: name: "string.unquoted.parameter.identifier.afm"
+		},{
+			# Bounding box
+			name: "meta.metric.bounding-box.afm"
+			begin: "(?<=\\s|^|;)(B)(?=\\s|$|;)"
+			end:   "(?=$|;)"
+			beginCaptures:
+				1: name: "variable.assignment.metric.afm"
+			patterns: [include: "#number"]
+		},{
+			# Successor ligature
+			name: "meta.metric.next-ligature.afm"
+			begin: "(?<=\\s|^|;)(L)(?=\\s|$|;)"
+			end:   "(?=$|;)"
+			beginCaptures:
+				1: name: "variable.assignment.metric.afm"
+			patterns: [{
+				match: "[^;\\s]+"
+				name: "string.unquoted.parameter.identifier.afm"
+			}]
+		}]
 	
 	
 	# Boolean-typed property
@@ -159,7 +277,7 @@ repository:
 	# Value of an integer-typed keyword
 	paramInteger:
 		patterns: [{
-			match: "\\G\\s+([0-9]+)\\s*$"
+			match: "\\G\\s+([-+]?[0-9]+)\\s*$"
 			captures: 1: patterns: [include: "#integer"]
 		}, include: "#paramInvalid"]
 	
@@ -211,11 +329,6 @@ repository:
 		captures:
 			1: name: "variable.assignment.afm"
 	
-	
-	# Floating-point numbers
-	real:
-		name: "constant.numeric.float.afm"
-		match: "(?<!\\w)[-+]?\\d*\\.\\d+"
 
 
 	# Sections of AFM source delimited by `(Start|End)…`-type statements
