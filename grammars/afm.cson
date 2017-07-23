@@ -21,6 +21,8 @@ repository:
 			{include: "#amfmSpecific"}
 			{include: "#direction"}
 			{include: "#primaryFonts"}
+			{include: "#reserved"}
+			{include: "#userDefined"}
 		]
 
 
@@ -606,4 +608,48 @@ repository:
 			endCaptures:
 				1: name: "keyword.control.end.file.afm"
 			patterns: [include: "#main"]
+		}]
+
+
+	# Unrecognised or user-defined property key
+	userDefined:
+		match: "^([a-z][A-Za-z0-9]+)(?=\\s)(.*)$"
+		captures:
+			1: name: "variable.other.custom.afm"
+			2: patterns: [include: "#bestGuessHighlights"]
+	
+	
+	# Anything starting with a capital letter is reserved by Adobe for future use
+	reserved:
+		match: "^([A-Z][A-Za-z0-9]+)(?=\\s)(.*)$"
+		captures:
+			1: name: "variable.other.reserved.afm"
+			2: patterns: [include: "#bestGuessHighlights"]
+	
+	
+	bestGuessHighlights:
+		patterns: [{
+			match: "\\G\\s*(true|false)(?=\\s|$)"
+			captures:
+				1: patterns: [include: "#boolean"]
+		},{
+			match: "^(?:\\s+[-+]?[.\\d]+)+\\s*$"
+			captures: 0: patterns: [include: "#numbers"]
+		},{
+			match: "^\\s*(\\[.*\\])\\s*$"
+			captures: 0: patterns: [
+				{include: "#array"}
+				{include: "#main"}]
+		},{
+			match: "^\\s*<[A-Fa-f0-9]+>\\s*$"
+			captures: 0: patterns: [include: "#hex"]
+		},{
+			match: "(?:(?:^|\\s+)/[^\\s\\[\\];]+)+\\s*$"
+			captures:
+				0: patterns: [include: "#psLiteral"]
+		},{
+			match: "^.+$"
+			name: "variable.assignment.afm"
+			captures:
+				0: name: "string.unquoted.afm"
 		}]
