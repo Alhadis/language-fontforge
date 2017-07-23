@@ -10,9 +10,15 @@ As of v1.1, also includes support for [OpenType feature files][4] (`.fea`):
 
 ![Just because][5]
 
+And as of v1.2, uh, also includes support for [Adobe Font Metrics][6] (`.afm`):
+
+![All work and no highlighting makes John hack random grammars together][7]
+
 [Referenced links]:_____________________________________________________________
 [1]: http://fontforge.github.io/en-US/documentation/developers/sfdformat/
 [2]: http://fontforge.github.io/en-US/documentation/scripting/native/
 [3]: https://github.com/Alhadis/language-fontforge/blob/master/prev-1.png?raw=1
 [4]: http://www.adobe.com/devnet/opentype/afdko/topic_feature_file_syntax.html
 [5]: https://github.com/Alhadis/language-fontforge/blob/master/prev-2.png?raw=1
+[6]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
+[7]: https://github.com/Alhadis/language-fontforge/blob/master/prev-3.png?raw=1
