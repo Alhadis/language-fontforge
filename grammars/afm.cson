@@ -238,7 +238,7 @@ repository:
 		},{
 			# Other Boolean-typed metadata properties
 			name: "meta.metadata.${1:/downcase}.afm"
-			begin: "^(IsBaseFont|IsFixedV)(?=\\s|$)"
+			begin: "^(IsBaseFont|IsFixedV|IsCIDFont)(?=\\s|$)"
 			end:   "^|$"
 			patterns: [include: "#paramBoolean"]
 			beginCaptures:
