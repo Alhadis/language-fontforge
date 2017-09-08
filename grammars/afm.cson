@@ -462,8 +462,11 @@ repository:
 		begin: "^(Start(Direction|Axis|Master))(?:\\s+([-+]?\\d+))?\\s*$"
 		end:   "^End\\2\\s*$"
 		patterns: [include: "#main"]
-		beginCaptures: 1: name: "keyword.control.start.${2:/downcase}.afm"
-		endCaptures:   0: name: "keyword.control.end.${2:/downcase}.afm"
+		beginCaptures:
+			1: name: "keyword.control.start.${2:/downcase}.afm"
+			3: patterns: [include: "#integer"]
+		endCaptures:
+			0: name: "keyword.control.end.${2:/downcase}.afm"
 	
 	
 	# Character-data list specific to AMFM/ACFM files
