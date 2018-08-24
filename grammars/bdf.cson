@@ -8,6 +8,8 @@ repository:
 	main:
 		patterns: [
 			{include: "#globalInfo"}
+			{include: "#glyphs"}
+			{include: "#eof"}
 		]
 	
 	
@@ -36,6 +38,19 @@ repository:
 		match: "(?<!\\w)[-+]?\\d*\\.\\d+"
 	
 	
+	# Double-quoted string, used in properties block
+	quotedString:
+		name:  "string.quoted.double.bdf"
+		begin: '"'
+		end:   '"(?!")|(?=$)'
+		beginCaptures: 0: name: "punctuation.definition.string.begin.bdf"
+		endCaptures:   0: name: "punctuation.definition.string.end.bdf"
+		patterns: [{
+			name: "constant.character.escape.quote.bdf"
+			match: '""'
+		}]
+	
+	
 	# Metric fields
 	metrics:
 		name: "meta.font-metric.${1:/downcase}.bdf"
@@ -46,11 +61,18 @@ repository:
 			0: name: "keyword.operator.font-metric.bdf"
 	
 	
+	# Marker delimiting the end of a BDF file
+	eof:
+		match: "^(ENDFONT)\\s*$"
+		captures:
+			1: name: "keyword.control.end.file.bdf"
+	
+	
 	# Global font information
 	globalInfo:
 		name:  "meta.global-info.bdf"
 		begin: "^(STARTFONT)\\s+([-+]?\\d+(?:\\.\\d+)?)?\\s*$"
-		end:   "^(?=CHARS|ENDFONT)\\b"
+		end:   "^(?=CHARS\\b|ENDFONT\\b)"
 		beginCaptures:
 			1: name: "keyword.control.start.file.bdf"
 			2: name: "constant.numeric.float.decimal.version-number.bdf"
@@ -102,40 +124,78 @@ repository:
 				name: "invalid.illegal.unknown-type.bdf"
 				match: "[3-9]+"
 			}, include: "#paramInteger"]
+			beginCaptures:
+				0: name: "keyword.operator.metrics-set.bdf"
 		},{
 			# Arbitrary properties
 			name: "meta.properties-list.bdf"
 			begin: "^(STARTPROPERTIES)(?:\\s+(\\d+))?\\s*$"
-			end:   "^(ENDPROPERTIES)\\s*$|^(?=CHARS|ENDFONT)\\b"
+			end:   "^(ENDPROPERTIES)\\s*$|^(?=CHARS\\b|ENDFONT\\b)"
 			beginCaptures:
 				1: name: "keyword.control.start.properties.bdf"
 				2: patterns: [include: "#integer"]
 			endCaptures:
 				1: name: "keyword.control.end.properties.bdf"
 			patterns: [{
+				# Individual property lines
 				name: "meta.property.bdf"
-				begin: "^(\\S+)\\s*"
-				end:   "$"
-				beginCaptures:
+				match: "^(\\S+)(?:\\s+(\\S.*))?(?=\\s*$)"
+				captures:
 					1: name: "variable.assignment.property.name.bdf"
-				patterns: [{
-					# Integer-typed property
-					name: "constant.numeric.integer.decimal.bdf"
-					match: "\\G\\d+\\s*$"
-				},{
-					# Quoted string
-					name:  "string.quoted.double.bdf"
-					begin: '"'
-					end:   '"(?!")'
-					beginCaptures: 0: name: "punctuation.definition.string.begin.bdf"
-					endCaptures:   0: name: "punctuation.definition.string.end.bdf"
-					patterns: [{
-						name: "constant.character.escape.quote.bdf"
-						match: '""'
-					}]
-				}]
+					2: patterns: [
+						{include: "#integer"}
+						{include: "#quotedString"}]
 			}]
 		}, include: "#metrics"]
+	
+	
+	# Section for glyph-related data
+	glyphs:
+		name: "meta.glyphs-list.bdf"
+		begin: "^(CHARS)(?:\\s+(\\d+))?\\s*$"
+		end:   "^(?=ENDFONT\\b)"
+		beginCaptures:
+			1: name: "keyword.control.start.glyphs.bdf"
+			2: name: "constant.numeric.decimal.integer.bdf"
+		patterns: [{
+			# Individual glyph information
+			name:  "meta.glyph.bdf"
+			begin: "^(STARTCHAR)(?:\\s+(\\S.*))?(?=\\s*$)"
+			end:   "^(ENDCHAR)\\s*$"
+			beginCaptures:
+				1: name: "keyword.control.start.glyph.bdf"
+				2: name: "string.unquoted.glyph-name.bdf"
+			endCaptures:
+				1: name: "keyword.control.end.glyph.bdf"
+			patterns: [{
+				# Glyph encoding
+				name:  "meta.glyph-encoding.bdf"
+				begin: "^ENCODING(?=\\s|$)"
+				end:   "$"
+				beginCaptures:
+					0: name: "keyword.operator.glyph-encoding.bdf"
+				patterns: [include: "#paramNumbers"]
+			},{
+				# Glyph bounding-box
+				name: "meta.bounding-box.bdf"
+				begin: "^BBX(?=\\s|$)"
+				end:   "$"
+				beginCaptures:
+					0: name: "keyword.operator.bounding-box.bdf"
+				patterns: [include: "#paramNumbers"]
+			},{
+				# Pixel bitmap data
+				name: "meta.bitmap.bdf"
+				begin: "^(BITMAP)\\s*$"
+				end:   "^(?=ENDCHAR\\b|ENDFONT\\b)"
+				beginCaptures:
+					1: name: "keyword.operator.bitmap.bdf"
+				patterns: [{
+					name: "constant.numeric.hexadecimal.hex.byte.bdf"
+					match: "^[0-9A-Fa-f]+(?=\\s*$)"
+				}]
+			}, include: "#metrics"]
+		}]
 	
 	
 	# Value for an integer-type field

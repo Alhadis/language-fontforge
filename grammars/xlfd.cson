@@ -36,7 +36,7 @@ repository:
 				([!#-)+.->@-~]*)      (-) # SPACING
 				([!#-)+.->@-~]*)      (-) # AVERAGE_WIDTH
 				([!#-)+.->@-~]*)      (-) # CHARSET_REGISTRY
-				([!#-)+.->@-~]*)      (-) # CHARSET_ENCODING
+				([!#-)+.->@-~]*)          # CHARSET_ENCODING
 			)
 		"""
 		captures:
@@ -85,4 +85,3 @@ repository:
 			31: name: "entity.field.name.charset-registry.xlfd"
 			32: name: "punctuation.delimiter.dash.xlfd"
 			33: name: "entity.field.name.charset-encoding.xlfd"
-			34: name: "punctuation.delimiter.dash.xlfd"
