@@ -1,10 +1,7 @@
 # Source: https://x.org/archive/X11R7.6/doc/xorg-docs/specs/XLFD/xlfd.pdf
 name: "X Logical Font Description"
 scopeName: "source.xlfd"
-patterns: [
-	{include: "#name"}
-	{include: "#properties"}
-]
+patterns: [include: "#name"]
 
 repository:
 	# FontName string
