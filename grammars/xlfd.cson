@@ -1,5 +1,5 @@
 # Source: https://x.org/archive/X11R7.6/doc/xorg-docs/specs/XLFD/xlfd.pdf
-name: "X logical font description"
+name: "X Logical Font Description"
 scopeName: "source.xlfd"
 patterns: [
 	{include: "#name"}
@@ -25,18 +25,18 @@ repository:
 			(
 				([!#-)+.->@-~\\x20]*) (-) # FOUNDRY
 				([!#-)+.->@-~\\x20]*) (-) # FAMILY_NAME
-				([!#-)+.->@-~]*)      (-) # WEIGHT_NAME
-				([!#-)+.->@-~]*)      (-) # SLANT
+				([!#-)+.->@-~\\x20]*) (-) # WEIGHT_NAME
+				([!#-)+.->@-~\\x20]*) (-) # SLANT
 				([!#-)+.->@-~\\x20]*) (-) # SETWIDTH_NAME
-				([!#-)+.->@-~]*)      (-) # ADD_STYLE_NAME
-				([!#-)+.->@-~]*)      (-) # PIXEL_SIZE
-				([!#-)+.->@-~]*)      (-) # POINT_SIZE
-				([!#-)+.->@-~]*)      (-) # RESOLUTION_X
-				([!#-)+.->@-~]*)      (-) # RESOLUTION_Y
-				([!#-)+.->@-~]*)      (-) # SPACING
-				([!#-)+.->@-~]*)      (-) # AVERAGE_WIDTH
-				([!#-)+.->@-~]*)      (-) # CHARSET_REGISTRY
-				([!#-)+.->@-~]*)          # CHARSET_ENCODING
+				([!#-)+.->@-~\\x20]*) (-) # ADD_STYLE_NAME
+				([!#-)+.->@-~\\x20]*) (-) # PIXEL_SIZE
+				([!#-)+.->@-~\\x20]*) (-) # POINT_SIZE
+				([!#-)+.->@-~\\x20]*) (-) # RESOLUTION_X
+				([!#-)+.->@-~\\x20]*) (-) # RESOLUTION_Y
+				([!#-)+.->@-~\\x20]*) (-) # SPACING
+				([!#-)+.->@-~\\x20]*) (-) # AVERAGE_WIDTH
+				([!#-)+.->@-~\\x20]*) (-) # CHARSET_REGISTRY
+				([!#-)+.->@-~\\x20]*)     # CHARSET_ENCODING
 			)
 		"""
 		captures:
@@ -46,42 +46,157 @@ repository:
 			4:  name: "constant.numeric.decimal.float.version.xlfd"
 			5:  name: "punctuation.delimiter.dash.xlfd"
 			6:  name: "meta.fields.xlfd"
-			7:  name: "entity.field.name.foundry.xlfd"
+			7:  name: "entity.foundry.name.xlfd"
 			8:  name: "punctuation.delimiter.dash.xlfd"
-			9:  name: "entity.field.name.family-name.xlfd"
+			9:  name: "entity.family.name.xlfd"
 			10: name: "punctuation.delimiter.dash.xlfd"
-			11: name: "entity.field.name.weight-name.xlfd"
+			11: name: "entity.weight.name.xlfd"
 			12: name: "punctuation.delimiter.dash.xlfd"
-			13: patterns: [
-				{match: "^[Rr]$",     name: "constant.language.slant.regular.xlfd"}
-				{match: "^[Ii]$",     name: "constant.language.slant.italic.xlfd"}
-				{match: "^[Oo]$",     name: "constant.language.slant.oblique.xlfd"}
-				{match: "^[Rr][Ii]$", name: "constant.language.slant.reverse-italic.xlfd"}
-				{match: "^[Rr][Oo]$", name: "constant.language.slant.reverse-oblique.xlfd"}
-				{match: "^[Oo][Tt]$", name: "constant.language.slang.other-type.xlfd"}
-				{match: "^[0-9]+$",   name: "constant.numeric.int.integer.slant.xlfd"}
-				{match: "^.+$",       name: "invalid.illegal.unknown-type.slant.xlfd"}
-			]
+			13: patterns: [include: "#fieldSlant"]
 			14: name: "punctuation.delimiter.dash.xlfd"
-			15: patterns: [ # Set-width
-				{match: "^0$",  name: "constant.numeric.polymorphic.set-width.xlfd"}
-				{match: "^.+$", name: "entity.field.name.set-width.xlfd"}
-			]
+			15: patterns: [include: "#fieldSetWidth"]
 			16: name: "punctuation.delimiter.dash.xlfd"
-			17: name: "entity.field.name.add-style.xlfd"
+			17: patterns: [include: "#fieldAddStyleName"]
 			18: name: "punctuation.delimiter.dash.xlfd"
-			19: name: "entity.field.name.pixel-size.xlfd"
+			19: patterns: [include: "#fieldPixelSize"]
 			20: name: "punctuation.delimiter.dash.xlfd"
-			21: name: "entity.field.name.point-size.xlfd"
+			21: patterns: [include: "#fieldPointSize"]
 			22: name: "punctuation.delimiter.dash.xlfd"
-			23: name: "entity.field.name.resolution-x.xlfd"
+			23: patterns: [include: "#fieldResX"]
 			24: name: "punctuation.delimiter.dash.xlfd"
-			25: name: "entity.field.name.resolution-y.xlfd"
+			25: patterns: [include: "#fieldResY"]
 			26: name: "punctuation.delimiter.dash.xlfd"
-			27: name: "entity.field.name.spacing.xlfd"
+			27: patterns: [include: "#fieldSpacing"]
 			28: name: "punctuation.delimiter.dash.xlfd"
-			29: name: "entity.field.name.average-width.xlfd"
+			29: patterns: [include: "#fieldAverageWidth"]
 			30: name: "punctuation.delimiter.dash.xlfd"
-			31: name: "entity.field.name.charset-registry.xlfd"
+			31: name: "entity.charset-registry.name.xlfd"
 			32: name: "punctuation.delimiter.dash.xlfd"
-			33: name: "entity.field.name.charset-encoding.xlfd"
+			33: patterns: [include: "#fieldCharsetEncoding"]
+				
+
+
+	# SLANT
+	fieldSlant:
+		patterns: [
+			{match: "^[Rr]$",     name: "constant.language.slant.regular.xlfd"}
+			{match: "^[Ii]$",     name: "constant.language.slant.italic.xlfd"}
+			{match: "^[Oo]$",     name: "constant.language.slant.oblique.xlfd"}
+			{match: "^[Rr][Ii]$", name: "constant.language.slant.reverse-italic.xlfd"}
+			{match: "^[Rr][Oo]$", name: "constant.language.slant.reverse-oblique.xlfd"}
+			{match: "^[Oo][Tt]$", name: "constant.language.slang.other-type.xlfd"}
+			{match: "^[0-9]+$",   name: "constant.numeric.int.integer.slant.xlfd"}
+			{match: "^.+$",       name: "invalid.illegal.unknown-type.slant.xlfd"}
+		]
+	
+	
+	# SET_WIDTH
+	fieldSetWidth:
+		patterns: [
+			{match: "^0$",  name: "constant.numeric.polymorphic.set-width.xlfd"}
+			{match: "^.+$", name: "entity.set-width.name.xlfd"}
+		]
+
+
+	# ADD_STYLE_NAME
+	fieldAddStyleName:
+		name: "entity.add-style.name.xlfd"
+		match: "^.+$"
+		captures:
+			0: patterns: [
+				{match: "\\[", name: "punctuation.definition.square.bracket.begin.xlfd"}
+				{match: "\\]", name: "punctuation.definition.square.bracket.end.xlfd"}
+			]
+	
+	
+	# CHARSET_ENCODING
+	fieldCharsetEncoding:
+		match: "^([^\\[]+)((\\[)([^\\]]+)(\\]))?$"
+		captures:
+			1: name: "entity.charset-encoding.name.xlfd"
+			2: name: "meta.subsetting-hint.xlfd"
+			3: name: "punctuation.definition.square.bracket.begin.xlfd"
+			4: patterns: [{
+				name: "meta.subset-range.xlfd"
+				match: "(?:(0x[0-9A-Fa-f]+)|([0-9]+))(?:(_)(?:(0x[0-9A-Fa-f]+)|([0-9]+)))?"
+				captures:
+					1: name: "constant.numeric.hex.integer.xlfd"
+					2: name: "constant.numeric.decimal.integer.xlfd"
+					3: name: "punctuation.separator.range.underscore.xlfd"
+					4: name: "constant.numeric.hex.integer.xlfd"
+					5: name: "constant.numeric.decimal.integer.xlfd"
+			}]
+			5: name: "punctuation.definition.square.bracket.end.xlfd"
+	
+	
+	# PIXEL_SIZE
+	fieldPixelSize:
+		patterns: [{
+			name: "constant.numeric.int.integer.pixel-size.xlfd"
+			match: "^[0-9]+$"
+		},{
+			name:  "meta.pixel-size.matrix.xlfd"
+			begin: "^(?=\\[)"
+			end:   "$"
+			patterns: [include: "#matrix"]
+		}]
+
+
+	# POINT_SIZE
+	fieldPointSize:
+		patterns: [{
+			match: "^[0-9]+$"
+			name: "constant.numeric.int.integer.point-size.xlfd"
+		},{
+			name:  "meta.point-size.matrix.xlfd"
+			begin: "^(?=\\[)"
+			end:   "$"
+			patterns: [include: "#matrix"]
+		}]
+
+
+	# RESOLUTION_X
+	fieldResX:
+		name: "constant.numeric.unsigned.int.integer.resolution-x.xlfd"
+		match: "^[0-9]+$"
+
+
+	# RESOLUTION_Y
+	fieldResY:
+		name: "constant.numeric.unsigned.int.integer.resolution-y.xlfd"
+		match: "^[0-9]+$"
+
+
+	# Transformation matrices (point/pixel sizes)
+	matrix:
+		begin: "\\["
+		end:   "\\]"
+		beginCaptures: 0: name: "punctuation.definition.square.bracket.begin.xlfd"
+		endCaptures:   0: name: "punctuation.definition.square.bracket.end.xlfd"
+		patterns: [{
+			name: "constant.numeric.decimal.float.xlfd"
+			match: "[+~]?[0-9]*\\.[0-9]+(?:[Ee][+~]?[0-9]+)?"
+		},{
+			name: "constant.numeric.decimal.integer.int.xlfd"
+			match: "[+~]?[0-9]+(?:[Ee][+~]?[0-9]+)?"
+		}]
+
+
+	# Escapement class
+	fieldSpacing:
+		patterns: [{
+			name: "constant.language.field-spacing.proportional.variable-pitch.xlfd"
+			match: "^[Pp]$"
+		},{
+			name: "constant.language.field-spacing.monospaced.fixed-pitch.xlfd"
+			match: "^[Mm]$"
+		},{
+			name: "constant.language.field-spacing.monospaced.char-celled.xlfd"
+			match: "^[Cc]$"
+		}]
+
+
+	# AVERAGE_WIDTH
+	fieldAverageWidth:
+		name: "constant.numeric.integer.int.average-width.xlfd"
+		match: "[+~]?[0-9]+"
