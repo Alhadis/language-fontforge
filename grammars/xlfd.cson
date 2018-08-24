@@ -20,20 +20,20 @@ repository:
 			# XFontNameSuffix
 			# (Scoped as `meta.fields', as `suffix' is misleading)
 			(
-				([!#-)+.->@-~\\x20]*) (-) # FOUNDRY
-				([!#-)+.->@-~\\x20]*) (-) # FAMILY_NAME
-				([!#-)+.->@-~\\x20]*) (-) # WEIGHT_NAME
-				([!#-)+.->@-~\\x20]*) (-) # SLANT
-				([!#-)+.->@-~\\x20]*) (-) # SETWIDTH_NAME
-				([!#-)+.->@-~\\x20]*) (-) # ADD_STYLE_NAME
-				([!#-)+.->@-~\\x20]*) (-) # PIXEL_SIZE
-				([!#-)+.->@-~\\x20]*) (-) # POINT_SIZE
-				([!#-)+.->@-~\\x20]*) (-) # RESOLUTION_X
-				([!#-)+.->@-~\\x20]*) (-) # RESOLUTION_Y
-				([!#-)+.->@-~\\x20]*) (-) # SPACING
-				([!#-)+.->@-~\\x20]*) (-) # AVERAGE_WIDTH
-				([!#-)+.->@-~\\x20]*) (-) # CHARSET_REGISTRY
-				([!#-)+.->@-~\\x20]*)     # CHARSET_ENCODING
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # FOUNDRY
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # FAMILY_NAME
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # WEIGHT_NAME
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # SLANT
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # SETWIDTH_NAME
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # ADD_STYLE_NAME
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # PIXEL_SIZE
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # POINT_SIZE
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # RESOLUTION_X
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # RESOLUTION_Y
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # SPACING
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # AVERAGE_WIDTH
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*])) (-) # CHARSET_REGISTRY
+				(?: ([!#-)+.->@-~\\x20]*) | ([?*]))     # CHARSET_ENCODING
 			)
 		"""
 		captures:
@@ -44,33 +44,47 @@ repository:
 			5:  name: "punctuation.delimiter.dash.xlfd"
 			6:  name: "meta.fields.xlfd"
 			7:  name: "entity.foundry.name.xlfd"
-			8:  name: "punctuation.delimiter.dash.xlfd"
-			9:  name: "entity.family.name.xlfd"
-			10: name: "punctuation.delimiter.dash.xlfd"
-			11: name: "entity.weight.name.xlfd"
+			8:  patterns: [include: "#wildcards"]
+			9:  name: "punctuation.delimiter.dash.xlfd"
+			10: name: "entity.family.name.xlfd"
+			11: patterns: [include: "#wildcards"]
 			12: name: "punctuation.delimiter.dash.xlfd"
-			13: patterns: [include: "#fieldSlant"]
-			14: name: "punctuation.delimiter.dash.xlfd"
-			15: patterns: [include: "#fieldSetWidth"]
-			16: name: "punctuation.delimiter.dash.xlfd"
-			17: patterns: [include: "#fieldAddStyleName"]
+			13: name: "entity.weight.name.xlfd"
+			14: patterns: [include: "#wildcards"]
+			15: name: "punctuation.delimiter.dash.xlfd"
+			16: patterns: [include: "#fieldSlant"]
+			17: patterns: [include: "#wildcards"]
 			18: name: "punctuation.delimiter.dash.xlfd"
-			19: patterns: [include: "#fieldPixelSize"]
-			20: name: "punctuation.delimiter.dash.xlfd"
-			21: patterns: [include: "#fieldPointSize"]
-			22: name: "punctuation.delimiter.dash.xlfd"
-			23: patterns: [include: "#fieldResX"]
+			19: patterns: [include: "#fieldSetWidth"]
+			20: patterns: [include: "#wildcards"]
+			21: name: "punctuation.delimiter.dash.xlfd"
+			22: patterns: [include: "#fieldAddStyleName"]
+			23: patterns: [include: "#wildcards"]
 			24: name: "punctuation.delimiter.dash.xlfd"
-			25: patterns: [include: "#fieldResY"]
-			26: name: "punctuation.delimiter.dash.xlfd"
-			27: patterns: [include: "#fieldSpacing"]
-			28: name: "punctuation.delimiter.dash.xlfd"
-			29: patterns: [include: "#fieldAverageWidth"]
+			25: patterns: [include: "#fieldPixelSize"]
+			26: patterns: [include: "#wildcards"]
+			27: name: "punctuation.delimiter.dash.xlfd"
+			28: patterns: [include: "#fieldPointSize"]
+			29: patterns: [include: "#wildcards"]
 			30: name: "punctuation.delimiter.dash.xlfd"
-			31: name: "entity.charset-registry.name.xlfd"
-			32: name: "punctuation.delimiter.dash.xlfd"
-			33: patterns: [include: "#fieldCharsetEncoding"]
-				
+			31: patterns: [include: "#fieldResX"]
+			32: patterns: [include: "#wildcards"]
+			33: name: "punctuation.delimiter.dash.xlfd"
+			34: patterns: [include: "#fieldResY"]
+			35: patterns: [include: "#wildcards"]
+			36: name: "punctuation.delimiter.dash.xlfd"
+			37: patterns: [include: "#fieldSpacing"]
+			38: patterns: [include: "#wildcards"]
+			39: name: "punctuation.delimiter.dash.xlfd"
+			40: patterns: [include: "#fieldAverageWidth"]
+			41: patterns: [include: "#wildcards"]
+			42: name: "punctuation.delimiter.dash.xlfd"
+			43: name: "entity.charset-registry.name.xlfd"
+			44: patterns: [include: "#wildcards"]
+			45: name: "punctuation.delimiter.dash.xlfd"
+			46: patterns: [include: "#fieldCharsetEncoding"]
+			47: patterns: [include: "#wildcards"]
+			
 
 
 	# SLANT
@@ -197,3 +211,12 @@ repository:
 	fieldAverageWidth:
 		name: "constant.numeric.integer.int.average-width.xlfd"
 		match: "[+~]?[0-9]+"
+
+
+
+	# X Protocol font name wildcard characters
+	wildcards:
+		patterns: [
+			{match: "\\?", name: "keyword.operator.logical.wildcard.xlfd"}
+			{match: "\\*", name: "keyword.operator.logical.wildcard.xlfd"}
+		]
