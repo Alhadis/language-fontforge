@@ -1,0 +1,189 @@
+name: "Glyph Bitmap Distribution Format"
+scopeName: "source.bdf"
+fileTypes: ["bdf"]
+firstLineMatch: "\\ASTARTFONT\\s+[0-9]+\\.[0-9]+\\s*$"
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			{include: "#globalInfo"}
+		]
+	
+	
+	# Integer literal
+	integer:
+		patterns: [{
+			match: "(?<!\\w)[-+]?(?=0)\\d+",
+			name: "constant.numeric.integer.octal.bdf"
+		},{
+			match: "(?<!\\w)[-+]?\\d+",
+			name: "constant.numeric.integer.decimal.bdf"
+		}]
+	
+	
+	# Numeric values of any type (float/integer)
+	numbers:
+		patterns: [
+			{include: "#real"}
+			{include: "#integer"}
+		]
+	
+	
+	# Floating-point numbers
+	real:
+		name: "constant.numeric.float.bdf"
+		match: "(?<!\\w)[-+]?\\d*\\.\\d+"
+	
+	
+	# Metric fields
+	metrics:
+		name: "meta.font-metric.${1:/downcase}.bdf"
+		begin: "^([SD]WIDTH1?|VVECTOR)(?=\\s|$)"
+		end:   "$"
+		patterns: [include: "#paramNumbers"]
+		beginCaptures:
+			0: name: "keyword.operator.font-metric.bdf"
+	
+	
+	# Global font information
+	globalInfo:
+		name:  "meta.global-info.bdf"
+		begin: "^(STARTFONT)\\s+([-+]?\\d+(?:\\.\\d+)?)?\\s*$"
+		end:   "^(?=CHARS|ENDFONT)\\b"
+		beginCaptures:
+			1: name: "keyword.control.start.file.bdf"
+			2: name: "constant.numeric.float.decimal.version-number.bdf"
+		patterns: [{
+			# Comment, discarded by interpreter
+			contentName: "comment.line.bdf"
+			begin: "^COMMENT(?=\\s|$)"
+			end:   "$"
+			beginCaptures:
+				0: name: "keyword.operator.start-comment.bdf"
+		},{
+			# Installer-specific version
+			name:  "meta.content-version.bdf"
+			begin: "^CONTENTVERSION(?=\\s|$)"
+			end:   "$"
+			patterns: [include: "#paramInteger"]
+			beginCaptures:
+				0: name: "keyword.operator.content-version.bdf"
+		},{
+			# Font name
+			name: "meta.font-name.bdf"
+			begin: "^FONT(?=\\s|$)"
+			end:   "$"
+			patterns: [include: "source.xlfd#name"]
+			beginCaptures:
+				0: name: "keyword.operator.font-name.bdf"
+		},{
+			# Size (PointSize, Xres, Yres)
+			name: "meta.font-size.bdf"
+			begin: "^SIZE(?=\\s|$)"
+			end:   "$"
+			patterns: [include: "#paramNumbers"]
+			beginCaptures:
+				0: name: "keyword.operator.font-size.bdf"
+		},{
+			# Bounding box
+			name: "meta.bounding-box.bdf"
+			begin: "^FONTBOUNDINGBOX(?=\\s|$)"
+			end:   "$"
+			patterns: [include: "#paramIntegers"]
+			beginCaptures:
+				0: name: "keyword.operator.bounding-box.bdf"
+		},{
+			# Writing direction(s)
+			name: "meta.metrics-set.bdf"
+			begin: "^METRICSSET(?=\\s|$)"
+			end:   "$"
+			patterns: [{
+				name: "invalid.illegal.unknown-type.bdf"
+				match: "[3-9]+"
+			}, include: "#paramInteger"]
+		},{
+			# Arbitrary properties
+			name: "meta.properties-list.bdf"
+			begin: "^(STARTPROPERTIES)(?:\\s+(\\d+))?\\s*$"
+			end:   "^(ENDPROPERTIES)\\s*$|^(?=CHARS|ENDFONT)\\b"
+			beginCaptures:
+				1: name: "keyword.control.start.properties.bdf"
+				2: patterns: [include: "#integer"]
+			endCaptures:
+				1: name: "keyword.control.end.properties.bdf"
+			patterns: [{
+				name: "meta.property.bdf"
+				begin: "^(\\S+)\\s*"
+				end:   "$"
+				beginCaptures:
+					1: name: "variable.assignment.property.name.bdf"
+				patterns: [{
+					# Integer-typed property
+					name: "constant.numeric.integer.decimal.bdf"
+					match: "\\G\\d+\\s*$"
+				},{
+					# Quoted string
+					name:  "string.quoted.double.bdf"
+					begin: '"'
+					end:   '"(?!")'
+					beginCaptures: 0: name: "punctuation.definition.string.begin.bdf"
+					endCaptures:   0: name: "punctuation.definition.string.end.bdf"
+					patterns: [{
+						name: "constant.character.escape.quote.bdf"
+						match: '""'
+					}]
+				}]
+			}]
+		}, include: "#metrics"]
+	
+	
+	# Value for an integer-type field
+	paramInteger:
+		patterns: [{
+			match: "\\G\\s+([-+]?[0-9]+)\\s*$"
+			captures: 1: patterns: [include: "#integer"]
+		}, include: "#paramInvalid"]
+	
+	
+	# Multiple integers
+	paramIntegers:
+		patterns: [
+			{include: "#integer"}
+			
+			match: "(?![-+0-9.])\\S+",
+			name: "invalid.illegal.syntax.type.bdf"]
+	
+	
+	# Unexpected or illegal value
+	paramInvalid:
+		match: "\\G\\s+(\\S+.+)\\s*$"
+		captures:
+			1: name: "invalid.illegal.syntax.type.bdf"
+	
+	
+	# Either floating-point value or an integer
+	paramNumber:
+		patterns: [{
+			match: "\\G\\s+([-+]?(?:\\d*\\.\\d+|\\d+))\\s*$"
+			captures: 1: patterns: [
+				{include: "#real"}
+				{include: "#integer"}]
+		}, include: "#paramInvalid"]
+	
+	# Multiple numeric values
+	paramNumbers:
+		patterns: [
+			{include: "#real"}
+			{include: "#integer"}
+			
+			match: "(?![-+0-9.])\\S+",
+			name: "invalid.illegal.syntax.type.bdf"]
+	
+	
+	# Freeform character data, extending to EOL. Quotes not required.
+	paramString:
+		name: "variable.assignment.bdf"
+		match: "\\G\\s+(\\S.*)\\s*$"
+		captures:
+			1: name: "string.unquoted.bdf"
