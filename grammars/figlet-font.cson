@@ -1,4 +1,4 @@
-name: "FIGfont"
+name: "FIGlet Font"
 scopeName: "source.figfont"
 fileTypes: ["flf"]
 firstLineMatch: "\\Aflf2a"
@@ -9,6 +9,7 @@ repository:
 		patterns: [
 			{include: "#prologue"}
 			{include: "#codeTag"}
+			{include: "#codeTagTable"}
 			{include: "#fontData"}
 			{include: "#endmarks"}
 		]
@@ -37,10 +38,10 @@ repository:
 	codeTag:
 		name:  "meta.code-tag.figfont"
 		match: """(?x) ^
-			( (-1)(?=\\s|$)
-			| ([-+]?(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
-			| ([-+]?0[0-7]+)                    # Octal
-			| ([-+]?0[Xx][0-9A-Fa-f]+)          # Hex
+			( (-(?:0[Xx])?0*1)(?=\\s|$)        # Invalid -1
+			| (\\+?(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
+			| (\\+?0[0-7]+)                    # Octal
+			| (\\+?0[Xx][0-9A-Fa-f]+)          # Hex
 			)
 			(?:\\s+(\\S.*))?
 			(?=\\s*$)
@@ -53,6 +54,28 @@ repository:
 			5: name: "constant.numeric.hexadecimal.hex.integer.int.figfont"
 			6: name: "string.unquoted.description.figfont"
 	
+	
+	# Translation table indicated by negative codepoint
+	codeTagTable:
+		name: "meta.translation-table.figfont"
+		begin: """(?x) ^
+			( (-(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
+			| (-0[0-7]+)                    # Octal
+			| (-0[Xx][0-9A-Fa-f]+)          # Hex
+			)
+			(?:\\s+(\\S.*))?
+			\\s*$\\n?
+		"""
+		end: "(?<=@@|##)$"
+		beginCaptures:
+			0: name: "meta.code-tag.figfont"
+			1: name: "meta.negative.codepoint.figfont"
+			2: name: "constant.numeric.decimal.integer.int.figfont"
+			3: name: "constant.numeric.octal.integer.int.figfont"
+			4: name: "constant.numeric.hexadecimal.hex.integer.int.figfont"
+			5: name: "string.unquoted.description.figfont"
+		contentName: "string.interpolated.code-tag.figfont"
+		patterns: [include: "#endmarks"]
 	
 	# Glyph data
 	fontData:
