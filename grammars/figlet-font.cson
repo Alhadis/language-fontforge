@@ -25,7 +25,7 @@ repository:
 	prologue:
 		name:  "meta.prologue.figfont"
 		begin: "^(flf2a)(\\S|\\x7F)(\\s+.+)?\\s*$"
-		end:   "^\\s*(?=\\2|.{0,6}[#@]\\s*$)"
+		end:   "^\\s*(?=\\2(?!.*(?i:hard\\W?blank))|.{0,6}[#@]\\s*$)"
 		contentName: "comment.block.freeform.figfont"
 		beginCaptures:
 			0: name: "meta.header-line.figfont"
@@ -37,7 +37,7 @@ repository:
 	# Character codepoint followed by Unicode description
 	codeTag:
 		name:  "meta.code-tag.figfont"
-		match: """(?x) ^
+		match: """(?x) ^(?!.+[@#]$)
 			( (-(?:0[Xx])?0*1)(?=\\s|$)        # Invalid -1
 			| (\\+?(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
 			| (\\+?0[0-7]+)                    # Octal
@@ -58,7 +58,7 @@ repository:
 	# Translation table indicated by negative codepoint
 	codeTagTable:
 		name: "meta.translation-table.figfont"
-		begin: """(?x) ^
+		begin: """(?x) ^(?!.+[@#]$)
 			( (-(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
 			| (-0[0-7]+)                    # Octal
 			| (-0[Xx][0-9A-Fa-f]+)          # Hex
