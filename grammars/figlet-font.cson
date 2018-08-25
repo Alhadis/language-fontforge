@@ -1,0 +1,66 @@
+name: "FIGfont"
+scopeName: "source.figfont"
+fileTypes: ["flf"]
+firstLineMatch: "\\Aflf2a"
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			{include: "#prologue"}
+			{include: "#codeTag"}
+			{include: "#fontData"}
+			{include: "#endmarks"}
+		]
+
+
+	# Run-of-the-mill integer
+	integer:
+		name: "constant.numeric.decimal.integer.int.figfont"
+		match: "[-+]?[0-9]+"
+
+
+	# Header-line and comments
+	prologue:
+		name:  "meta.prologue.figfont"
+		begin: "^(flf2a)(\\S|\\x7F)(\\s+.+)?\\s*$"
+		end:   "^\\s*(?=\\2|.{0,6}[#@]\\s*$)"
+		contentName: "comment.block.freeform.figfont"
+		beginCaptures:
+			0: name: "meta.header-line.figfont"
+			1: name: "keyword.control.file.signature.figfont"
+			2: name: "variable.parameter.hardblank.figfont"
+			3: patterns: [include: "#integer"]
+	
+	
+	# Character codepoint followed by Unicode description
+	codeTag:
+		name:  "meta.code-tag.figfont"
+		match: """(?x) ^
+			( (-1)(?=\\s|$)
+			| ([-+]?(?:[1-9][0-9]*|0(?=\\s|$))) # Decimal
+			| ([-+]?0[0-7]+)                    # Octal
+			| ([-+]?0[Xx][0-9A-Fa-f]+)          # Hex
+			)
+			(?:\\s+(\\S.*))?
+			(?=\\s*$)
+		"""
+		captures:
+			1: name: "meta.codepoint.figfont"
+			2: name: "invalid.illegal.reserved-codepoint.figfont"
+			3: name: "constant.numeric.decimal.integer.int.figfont"
+			4: name: "constant.numeric.octal.integer.int.figfont"
+			5: name: "constant.numeric.hexadecimal.hex.integer.int.figfont"
+			6: name: "string.unquoted.description.figfont"
+	
+	
+	# Glyph data
+	fontData:
+		name:  "constant.character.sub-character.figfont"
+		match: "[^#@\\s]+|#+(?!#*$)|@+(?!@*$)"
+	
+	
+	# Terminals for each data-row
+	endmarks:
+		name: "keyword.operator.endmark.character.figfont"
+		match: "(?:@+|#+)$"
