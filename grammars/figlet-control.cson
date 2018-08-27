@@ -121,7 +121,7 @@ repository:
 					([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
 					|
 					# 3: include: “#char”
-					(\\\\[ ]|[^\\s]+)
+					(\\\\[ ]|(?:\\\\-)?[^-\\s]+)
 				)
 				(?:
 					# 4: punctuation.separator.dash.range.figctrl
@@ -132,7 +132,7 @@ repository:
 						([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
 						|
 						# 6: include: “#char”
-						(\\\\[ ]|[^\\s]+)
+						(\\\\[ ]|(?:\\\\-)?[^-\\s]+)
 					)
 				)?
 			)
@@ -146,7 +146,7 @@ repository:
 					([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
 					|
 					# 9: include: “#char”
-					(\\\\[ ]|[^\\s]+)
+					(\\\\[ ]|(?:\\\\-)?[^-\\s]+)
 				)
 				(?:
 					# 10: punctuation.separator.dash.range.figctrl
@@ -157,7 +157,7 @@ repository:
 						([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
 						|
 						# 12: include: “#char”
-						(\\\\[ ]|[^\\s]+)
+						(\\\\[ ]|(?:\\\\-)?[^-\\s]+)
 					)
 				)?
 			)
