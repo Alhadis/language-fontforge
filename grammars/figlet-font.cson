@@ -1,6 +1,6 @@
 name: "FIGlet Font"
 scopeName: "source.figfont"
-fileTypes: ["flf"]
+fileTypes: ["flf", "tlf"]
 firstLineMatch: "\\Aflf2a"
 patterns: [include: "#main"]
 
@@ -24,7 +24,7 @@ repository:
 	# Header-line and comments
 	prologue:
 		name:  "meta.prologue.figfont"
-		begin: "^(flf2a)(\\S|\\x7F)(\\s+.+)?\\s*$"
+		begin: "^([ft]lf2a)(\\S|\\x7F)(\\s+.+)?\\s*$"
 		end:   "^\\s*(?=\\2(?!.*(?i:hard\\W?blank))|.{0,6}[#@]\\s*$)"
 		contentName: "comment.block.freeform.figfont"
 		beginCaptures:
