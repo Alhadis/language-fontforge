@@ -9,3 +9,7 @@
 ".source.afm":
 	editor:
 		commentStart: "Comment "
+
+".source.figctrl":
+	editor:
+		commentStart: "# "

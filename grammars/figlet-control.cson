@@ -1,0 +1,191 @@
+name: "FIGlet Control File"
+scopeName: "source.figctrl"
+fileTypes: ["flc"]
+firstLineMatch: "\\Aflc2a"
+patterns: [{
+	
+	# 5-byte magic number
+	name: "keyword.control.file.signature.figctrl"
+	match: "\\Aflc2a(?=\\s|$)"
+	
+}, include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			{include: "#comment"}
+			{include: "#transform"}
+			{include: "#extendedCommands"}
+			{include: "#transformArgs"}
+		]
+	
+	
+	# Character specifier, expressed literally or numerically
+	char:
+		patterns: [{
+			name: "constant.character.escape.figctrl"
+			match: "(\\\\)[ abefnrtv\\\\]"
+			captures:
+				1: name: "punctuation.definition.escape.backslash.figctrl"
+		},{
+			name: "constant.character.escape.codepoint.figctrl"
+			match: "(\\\\)[-+]?(?:0[Xx][A-Fa-f0-9]*|[0-9]+)"
+			captures:
+				1: name: "punctuation.definition.escape.backslash.figctrl"
+		},{
+			name: "string.unquoted.character.literal.figctrl"
+			match: "[^\\s\\\\]"
+		}]
+	
+	
+	# Comment lines
+	comment:
+		name:  "comment.line.number-sign.figctrl"
+		begin: "^#"
+		end:   "$"
+		beginCaptures:
+			0: name: "punctuation.definition.comment.figctrl"
+	
+	
+	# FIGlet 2.2+ extended commands
+	extendedCommands:
+		patterns: [{
+			# Niladic commands
+			name:  "meta.extended.command.input-encoding.figctrl"
+			begin: "^[bfhju]"
+			end:   "$"
+			beginCaptures:
+				0: name: "keyword.operator.command.figctrl"
+			patterns: [include: "#invalidArgument"]
+		},{
+			# G0, G1, G2, G3 control groups
+			name: "meta.extended.command.input-encoding.figctrl"
+			begin: "^g"
+			end:   "$"
+			beginCaptures:
+				0: name: "keyword.operator.command.figctrl"
+			patterns: [{
+				# g {L|R} {0|1|2|3}
+				match: "\\G\\s*(L|R)\\s*([0-3])?"
+				captures:
+					1: name: "storage.type.var.byte-half.figctrl"
+					2: name: "constant.numeric.decimal.integer.int.figctrl"
+			},{
+				# g {0|1|2|3} {94|96|94x94} [char]
+				match: "\\G\\s*([0-3])(?:\\s*(94x94|94|96)\\s*(\\\\ |\\S+))?"
+				captures:
+					1: name: "constant.numeric.decimal.integer.int.figctrl"
+					2: name: "constant.language.size.figctrl"
+					3: patterns: [include: "#char"]
+			}, include: "#invalidArgument"]
+		}]
+	
+	
+	# Something found where it shouldn't be
+	invalidArgument:
+		name:  "invalid.illegal.unexpected-argument.figctrl"
+		match: "\\S+"
+	
+	
+	# Numeric literal
+	number:
+		patterns: [{
+			name:  "constant.numeric.hexadecimal.hex.integer.int.figctrl"
+			match: "[-+]?0[Xx][0-9A-Fa-f]*"
+		},{
+			name: "constant.numeric.decimal.integer.int.figctrl"
+			match: "[-+]?[0-9]+"
+		}]
+	
+	
+	# Transform command
+	transform:
+		name:  "meta.transform.command.figctrl"
+		begin: "^t"
+		end:   "$"
+		beginCaptures:
+			0: name: "keyword.operator.command.figctrl"
+		patterns: [include: "#transformArgs"]
+
+
+	# Pair of numbers or characters
+	transformArgs:
+		name:  "meta.transform.arguments.figctrl"
+		match: """(?x)
+			(?:^|\\G) \\s*
+			
+			# 1: meta.transform.argument.from.figctrl
+			(
+				(?:
+					# 2: include: “#number”
+					([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
+					|
+					# 3: include: “#char”
+					(\\\\[ ]|[^\\s]+)
+				)
+				(?:
+					# 4: punctuation.separator.dash.range.figctrl
+					(-)
+					
+					(?:
+						# 5: include: “#number”
+						([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
+						|
+						# 6: include: “#char”
+						(\\\\[ ]|[^\\s]+)
+					)
+				)?
+			)
+			
+			\\s+
+			
+			# 7: meta.transform.argument.to.figctrl
+			(
+				(?:
+					# 8: include: “#number”
+					([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
+					|
+					# 9: include: “#char”
+					(\\\\[ ]|[^\\s]+)
+				)
+				(?:
+					# 10: punctuation.separator.dash.range.figctrl
+					(-)
+					
+					(?:
+						# 11: include: “#number”
+						([-+]?0[Xx][0-9A-Fa-f]*|[-+]?[0-9]+)
+						|
+						# 12: include: “#char”
+						(\\\\[ ]|[^\\s]+)
+					)
+				)?
+			)
+			
+			# 13: Possible trailing comment
+			(\\s+\\S.*)?
+		"""
+		captures:
+			1:  name: "meta.transform.argument.from.figctrl"
+			2:  patterns: [include: "#number"]
+			3:  patterns: [include: "#char"]
+			4:  name: "punctuation.separator.dash.range.figctrl"
+			5:  patterns: [include: "#number"]
+			6:  patterns: [include: "#char"]
+			7:  name: "meta.transform.argument.to.figctrl"
+			8:  patterns: [include: "#number"]
+			9:  patterns: [include: "#char"]
+			10: name: "punctuation.separator.dash.range.figctrl"
+			11: patterns: [include: "#number"]
+			12: patterns: [include: "#char"]
+			13: patterns: [{
+				# Trailing comment starting with a `#`
+				name:  "comment.line.number-sign.figctrl"
+				match: "(#).*"
+				captures:
+					1: name: "punctuation.definition.comment.figctrl"
+			},{
+				# Assume trailing characters without `#` are a comment
+				name: "comment.line.implicit.figctrl"
+				match: "[^\\s#].*"
+			}]
