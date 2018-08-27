@@ -66,7 +66,7 @@ repository:
 			(?:\\s+(\\S.*))?
 			\\s*$\\n?
 		"""
-		end: "(?<=@@|##)$"
+		end: "(?<=@@|##)[ \\t]*$"
 		beginCaptures:
 			0: name: "meta.code-tag.figfont"
 			1: name: "meta.negative.codepoint.figfont"
@@ -80,10 +80,10 @@ repository:
 	# Glyph data
 	fontData:
 		name:  "constant.character.sub-character.figfont"
-		match: "[^#@\\s]+|#+(?!#*$)|@+(?!@*$)"
+		match: "[^#@\\s]+|#+(?!#*[ \\t]*$)|@+(?!@*[ \\t]*$)"
 	
 	
 	# Terminals for each data-row
 	endmarks:
 		name: "keyword.operator.endmark.character.figfont"
-		match: "(?:@+|#+)$"
+		match: "(?:@+|#+)[ \\t]*$"
