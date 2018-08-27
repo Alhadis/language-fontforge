@@ -1,0 +1,48 @@
+# Source: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
+name: "X Font Directory Index"
+scopeName: "source.fontdir"
+fileTypes: [
+	"fonts.dir"
+	"fonts.scale"
+	"fonts.aliases"
+	"encodings.dir"
+]
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			# Like always, inclusion order matters
+			{include: "#entryCount"}
+			{include: "#entryName"}
+			{include: "source.xlfd#name"}
+			{include: "#comment"}
+			{include: "#otherField"}
+		]
+
+	
+	# Comment line, used in `font.aliases'
+	comment:
+		name:  "comment.line.bang.exclamation-mark.fontdir"
+		begin: "^!"
+		end:   "(?=$)"
+		beginCaptures:
+			0: name: "punctuation.definition.comment.fontdir"
+
+
+	# Number of font entries at beginning of `fonts.dir'
+	entryCount:
+		name:  "constant.numeric.integer.int.decimal.fontdir"
+		match: "\\A([0-9]+)(?=\\s|$)"
+
+
+	# Entry name with possible spaces
+	entryName:
+		name:  "string.unquoted.font-name.fontdir"
+		match: "^(?:[^-\\s]|\\s(?!-|\\S+$)|(?<!\\s)-)+"
+
+
+	# Something that doesn't match an XLFD
+	otherField:
+		name:  "constant.language.other.fontdir"
+		match: "(?<=\\s)\\S+$"

@@ -13,3 +13,7 @@
 ".source.figctrl":
 	editor:
 		commentStart: "# "
+
+".source.fontdir":
+	editor:
+		commentStart: "! "
