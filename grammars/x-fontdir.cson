@@ -4,7 +4,7 @@ scopeName: "source.fontdir"
 fileTypes: [
 	"fonts.dir"
 	"fonts.scale"
-	"fonts.aliases"
+	"fonts.alias"
 	"encodings.dir"
 ]
 patterns: [include: "#main"]
