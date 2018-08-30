@@ -90,29 +90,29 @@ repository:
 	# SLANT
 	fieldSlant:
 		patterns: [
-			{match: "^[Rr]$",     name: "constant.language.slant.regular.xlfd"}
-			{match: "^[Ii]$",     name: "constant.language.slant.italic.xlfd"}
-			{match: "^[Oo]$",     name: "constant.language.slant.oblique.xlfd"}
-			{match: "^[Rr][Ii]$", name: "constant.language.slant.reverse-italic.xlfd"}
-			{match: "^[Rr][Oo]$", name: "constant.language.slant.reverse-oblique.xlfd"}
-			{match: "^[Oo][Tt]$", name: "constant.language.slang.other-type.xlfd"}
-			{match: "^[0-9]+$",   name: "constant.numeric.int.integer.slant.xlfd"}
-			{match: "^.+$",       name: "invalid.illegal.unknown-type.slant.xlfd"}
+			{match: "(?:^|\\G)[Rr]$",     name: "constant.language.slant.regular.xlfd"}
+			{match: "(?:^|\\G)[Ii]$",     name: "constant.language.slant.italic.xlfd"}
+			{match: "(?:^|\\G)[Oo]$",     name: "constant.language.slant.oblique.xlfd"}
+			{match: "(?:^|\\G)[Rr][Ii]$", name: "constant.language.slant.reverse-italic.xlfd"}
+			{match: "(?:^|\\G)[Rr][Oo]$", name: "constant.language.slant.reverse-oblique.xlfd"}
+			{match: "(?:^|\\G)[Oo][Tt]$", name: "constant.language.slang.other-type.xlfd"}
+			{match: "(?:^|\\G)[0-9]+$",   name: "constant.numeric.int.integer.slant.xlfd"}
+			{match: "(?:^|\\G).+$",       name: "invalid.illegal.unknown-type.slant.xlfd"}
 		]
 	
 	
 	# SET_WIDTH
 	fieldSetWidth:
 		patterns: [
-			{match: "^0$",  name: "constant.numeric.polymorphic.set-width.xlfd"}
-			{match: "^.+$", name: "entity.set-width.name.xlfd"}
+			{match: "(?:^|\\G)0$",  name: "constant.numeric.polymorphic.set-width.xlfd"}
+			{match: "(?:^|\\G).+$", name: "entity.set-width.name.xlfd"}
 		]
 
 
 	# ADD_STYLE_NAME
 	fieldAddStyleName:
 		name: "entity.add-style.name.xlfd"
-		match: "^.+$"
+		match: "(?:^|\\G).+$"
 		captures:
 			0: patterns: [
 				{match: "\\[", name: "punctuation.definition.square.bracket.begin.xlfd"}
@@ -122,7 +122,7 @@ repository:
 	
 	# CHARSET_ENCODING
 	fieldCharsetEncoding:
-		match: "^([^\\[]+)((\\[)([^\\]]+)(\\]))?$"
+		match: "(?:^|\\G)([^\\[]+)((\\[)([^\\]]+)(\\]))?$"
 		captures:
 			1: name: "entity.charset-encoding.name.xlfd"
 			2: name: "meta.subsetting-hint.xlfd"
@@ -144,10 +144,10 @@ repository:
 	fieldPixelSize:
 		patterns: [{
 			name: "constant.numeric.int.integer.pixel-size.xlfd"
-			match: "^[0-9]+$"
+			match: "(?:^|\\G)[0-9]+$"
 		},{
 			name:  "meta.pixel-size.matrix.xlfd"
-			begin: "^(?=\\[)"
+			begin: "(?:^|\\G)(?=\\[)"
 			end:   "$"
 			patterns: [include: "#matrix"]
 		}]
@@ -156,11 +156,11 @@ repository:
 	# POINT_SIZE
 	fieldPointSize:
 		patterns: [{
-			match: "^[0-9]+$"
+			match: "(?:^|\\G)[0-9]+$"
 			name: "constant.numeric.int.integer.point-size.xlfd"
 		},{
 			name:  "meta.point-size.matrix.xlfd"
-			begin: "^(?=\\[)"
+			begin: "(?:^|\\G)(?=\\[)"
 			end:   "$"
 			patterns: [include: "#matrix"]
 		}]
@@ -169,13 +169,13 @@ repository:
 	# RESOLUTION_X
 	fieldResX:
 		name: "constant.numeric.unsigned.int.integer.resolution-x.xlfd"
-		match: "^[0-9]+$"
+		match: "(?:^|\\G)[0-9]+$"
 
 
 	# RESOLUTION_Y
 	fieldResY:
 		name: "constant.numeric.unsigned.int.integer.resolution-y.xlfd"
-		match: "^[0-9]+$"
+		match: "(?:^|\\G)[0-9]+$"
 
 
 	# Transformation matrices (point/pixel sizes)
@@ -197,13 +197,13 @@ repository:
 	fieldSpacing:
 		patterns: [{
 			name: "constant.language.field-spacing.proportional.variable-pitch.xlfd"
-			match: "^[Pp]$"
+			match: "(?:^|\\G)[Pp]$"
 		},{
 			name: "constant.language.field-spacing.monospaced.fixed-pitch.xlfd"
-			match: "^[Mm]$"
+			match: "(?:^|\\G)[Mm]$"
 		},{
 			name: "constant.language.field-spacing.monospaced.char-celled.xlfd"
-			match: "^[Cc]$"
+			match: "(?:^|\\G)[Cc]$"
 		}]
 
 
