@@ -13,10 +13,11 @@ repository:
 	main:
 		patterns: [
 			# Like always, inclusion order matters
+			{include: "#comment"}
+			{include: "#keywords"}
 			{include: "#entryCount"}
 			{include: "#entryName"}
 			{include: "source.xlfd#name"}
-			{include: "#comment"}
 			{include: "#otherField"}
 		]
 
@@ -38,11 +39,44 @@ repository:
 
 	# Entry name with possible spaces
 	entryName:
-		name:  "string.unquoted.font-name.fontdir"
-		match: "^(?:[^-\\s]|\\s(?!-|\\S+$)|(?<!\\s)-)+"
+		patterns: [{
+			# Quoted
+			include: "#string"
+		},{
+			# Unquoted
+			name:  "string.unquoted.font-name.fontdir"
+			match: "^(?:[^-\\s]|\\s(?!-|\\S+$)|(?<!\\s)-)+"
+		}]
 
+
+	# The `FILE_NAMES_ALIASES' directive (mkfontdir(1) § “Font Name Aliases”)
+	keywords:
+		name:  "keyword.control.directive.font-name-aliases.fontdir"
+		match: "^(FILE_NAMES_ALIASES)(?=\\s|$)"
+	
 
 	# Something that doesn't match an XLFD
 	otherField:
-		name:  "constant.language.other.fontdir"
-		match: "(?<=\\s)\\S+$"
+		patterns: [{
+			# Quoted
+			include: "#string"
+		},{
+			# Unquoted
+			name:  "constant.language.other.fontdir"
+			match: "(?<=\\s)\\S+$"
+		}]
+
+
+	# Quoted string
+	string:
+		name:  "string.quoted.double.font-name.fontdir"
+		begin: '"'
+		end:   '"|(?=$)'
+		beginCaptures: 0: name: "punctuation.definition.string.begin.fontdir"
+		endCaptures:   0: name: "punctuation.definition.string.end.fontdir"
+		patterns: [{
+			name:  "constant.character.escape.backslash.fontdir"
+			match: "(\\\\)."
+			captures:
+				1: name: "punctuation.definition.escape.backslash.fontdir"
+		}]
