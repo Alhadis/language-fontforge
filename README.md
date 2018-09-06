@@ -1,24 +1,40 @@
-FontForge Language Support
+Font-file language support
 ==========================
 
-Adds syntax highlighting to [Spline Font Database][1] files, as well as
-FontForge's [built-in scripting language][2].
+Adds syntax highlighting for several font-related text formats:
 
-![Because I can't stand Python][3]
+* [Adobe font metrics][afm]: `.afm`
+* [FIGlet fonts and control files][fig]: `.flc`, `.flf`, `.tlf`
+* [FontForge's built-in scripting language][pe]: `.pe`
+* [Glyph bitmap distribution files][bdf]: `.bdf`
+* [OpenType feature files][fea]: `.fea`
+* [Spline font databases][sfd]: `.sfd`
+* [X font directory lists][dir]: `fonts.dir`, `fonts.scale`, `fonts.alias`, `encodings.dir`
 
-As of v1.1, also includes support for [OpenType feature files][4] (`.fea`):
+Originally, only FontForge scripts were supported (hence the package's name).
+Over time, additional formats were added which were considered too niche to
+warrant their own repositories. Many of these grammars are now used by GitHub
+for highlighting their respective formats. Others may be added in the future.
 
-![Just because][5]
 
-And as of v1.2, uh, also includes support for [Adobe Font Metrics][6] (`.afm`):
+Previews
+--------
 
-![All work and no highlighting makes John hack random grammars together][7]
+> FontForge's scripting language:
+![Highlighted `.pe` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-1.png)
+
+> OpenType feature files:
+![Highlighted `.fea` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-2.png)
+
+> Adobe font metrics:
+![Highlighted `.afm` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-3.png)
+
 
 [Referenced links]:_____________________________________________________________
-[1]: http://fontforge.github.io/en-US/documentation/developers/sfdformat/
-[2]: http://fontforge.github.io/en-US/documentation/scripting/native/
-[3]: https://github.com/Alhadis/language-fontforge/blob/master/prev-1.png?raw=1
-[4]: http://www.adobe.com/devnet/opentype/afdko/topic_feature_file_syntax.html
-[5]: https://github.com/Alhadis/language-fontforge/blob/master/prev-2.png?raw=1
-[6]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
-[7]: https://github.com/Alhadis/language-fontforge/blob/master/prev-3.png?raw=1
+[afm]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
+[bdf]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5005.BDF_Spec.pdf
+[dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
+[fea]: http://www.adobe.com/devnet/opentype/afdko/topic_feature_file_syntax.html
+[fig]: http://www.figlet.org/figlet-man.html
+[pe]:  http://fontforge.github.io/en-US/documentation/scripting/native/
+[sfd]: http://fontforge.github.io/en-US/documentation/developers/sfdformat/
