@@ -1,0 +1,2 @@
+# Exclude preview images from package tarballs
+*.png export-ignore
