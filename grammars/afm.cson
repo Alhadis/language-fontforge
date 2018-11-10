@@ -1,7 +1,8 @@
 name: "Adobe Font Metrics"
 scopeName: "source.afm"
-fileTypes: ["afm", "amfm", "acfm"]
+fileTypes: ["afm", "amfm", "acfm", "amm"]
 firstLineMatch: "\\AStart(?:Comp|Master)?FontMetrics\\s+(?:\\d+(?:\\.\\d+)?)\\s*$"
+maxTokensPerLine: 2048,
 patterns: [
 	{include: "#resources"}
 	{include: "#main"}
@@ -459,12 +460,15 @@ repository:
 	# Section-types specific to AMFM/ACFM files
 	amfmSpecific:
 		name: "meta.${2:/downcase}.afm"
-		begin: "^(Start(Direction|Axis|Master))(?:\\s+([-+]?\\d+))?\\s*$"
+		begin: "^(Start(Descendent|Direction|Axis|Master))(?:\\s+(\\S.*))?"
 		end:   "^End\\2\\s*$"
 		patterns: [include: "#main"]
 		beginCaptures:
 			1: name: "keyword.control.start.${2:/downcase}.afm"
-			3: patterns: [include: "#integer"]
+			3: patterns: [
+				{include: "#hex"}
+				{include: "#integer"}
+			]
 		endCaptures:
 			0: name: "keyword.control.end.${2:/downcase}.afm"
 	
@@ -473,7 +477,7 @@ repository:
 	primaryFonts:
 		name: "meta.primary-fonts.afm"
 		begin: "^(StartPrimaryFonts)(?:\\s+([-+]?\\d+))?\\s*$"
-		end:   "^EndPrimaryFonts\\s*$"
+		end:   "\\bEndPrimaryFonts(?=\\s|$)|(?!P)(?=\\w)"
 		beginCaptures:
 			1: name: "keyword.control.start.font-list.afm"
 			2: patterns: [include: "#integer"]
@@ -486,15 +490,23 @@ repository:
 		]
 	
 	
-	# Single font listed inside  `(Start|End)PrimaryFonts` keywords
+	# Single font listed inside `(Start|End)PrimaryFonts` keywords
 	primaryFontLine:
-		begin: "^\\s*"
-		end:   "$"
 		patterns: [{
-			match: "\\G(PC)((?:\\s+[-+]?\\d+)+)"
-			captures:
-				1: name: "variable.assignment.metadata.afm"
-				2: patterns: [include: "#integer"]
+			# Invalid/empty field
+			name: "invalid.illegal.syntax.empty-field.afm"
+			match: "(?<=^|\\s|;)(?:PC|PL|PN)(?=\\s*;)"
+		},{
+			# Primary coordinates
+			name:  "meta.primary-coordinates.afm"
+			begin: "(?<=^|\\s|;)PC(?=\\s|$)"
+			end:   "(?=;|$|[A-Z])"
+			beginCaptures:
+				0: name: "variable.assignment.metadata.afm"
+			patterns: [
+				{include: "#real"}
+				{include: "#integer"}
+			]
 		},{
 			begin: "(?<=\\s|;)(P[LN])\\s+"
 			end:   "(?=;|$)"
