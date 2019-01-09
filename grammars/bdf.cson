@@ -7,10 +7,20 @@ patterns: [include: "#main"]
 repository:
 	main:
 		patterns: [
+			{include: "#comment"}
 			{include: "#globalInfo"}
 			{include: "#glyphs"}
 			{include: "#eof"}
 		]
+	
+	
+	# Comment, discarded by interpreter
+	comment:
+		contentName: "comment.line.bdf"
+		begin: "^COMMENT(?=\\s|$)"
+		end:   "$"
+		beginCaptures:
+			0: name: "keyword.operator.start-comment.bdf"
 	
 	
 	# Integer literal
@@ -77,12 +87,7 @@ repository:
 			1: name: "keyword.control.start.file.bdf"
 			2: name: "constant.numeric.float.decimal.version-number.bdf"
 		patterns: [{
-			# Comment, discarded by interpreter
-			contentName: "comment.line.bdf"
-			begin: "^COMMENT(?=\\s|$)"
-			end:   "$"
-			beginCaptures:
-				0: name: "keyword.operator.start-comment.bdf"
+			include: "#comment"
 		},{
 			# Installer-specific version
 			name:  "meta.content-version.bdf"

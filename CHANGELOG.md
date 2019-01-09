@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 [Unpublished]: ../../compare/v1.3.0...HEAD
 
 
+[Unpublished]
+------------------------------------------------------------------------
+* Fixed missing highlighting of BDF comments which precede `STARTFONT`
+
+
 [v1.3.0]
 ------------------------------------------------------------------------
 **September 6th, 2018:**  
