@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 [Unpublished]
 ------------------------------------------------------------------------
+* Added support for comment-toggling in BDF files
 * Fixed missing highlighting of BDF comments which precede `STARTFONT`
 
 

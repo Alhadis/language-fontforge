@@ -10,6 +10,10 @@
 	editor:
 		commentStart: "Comment "
 
+".source.bdf":
+	editor:
+		commentStart: "COMMENT "
+
 ".source.figctrl":
 	editor:
 		commentStart: "# "
