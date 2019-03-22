@@ -34,7 +34,7 @@ Previews
 [afm]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
 [bdf]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5005.BDF_Spec.pdf
 [dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
-[fea]: http://www.adobe.com/devnet/opentype/afdko/topic_feature_file_syntax.html
+[fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html
 [fig]: http://www.figlet.org/figlet-man.html
 [pe]:  http://fontforge.github.io/en-US/documentation/scripting/native/
 [sfd]: http://fontforge.github.io/en-US/documentation/developers/sfdformat/
