@@ -1,6 +1,6 @@
 name: "FontForge Script"
 scopeName: "source.fontforge"
-fileTypes: ["pe"]
+fileTypes: ["ff", "pe"]
 firstLineMatch: "/#!\\bfontforge\\b"
 patterns: [include: "#main"]
 
