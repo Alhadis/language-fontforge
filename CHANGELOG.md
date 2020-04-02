@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 ------------------------------------------------------------------------
 * Added support for comment-toggling in BDF and SFD files
 * Added `.ff` to supported FontForge script extensions
+* Fixed highlighting of SFD `GaspTable` fields without colons
 * Fixed missing highlighting of BDF comments which precede `STARTFONT`
 
 

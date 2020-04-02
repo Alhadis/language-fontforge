@@ -17,6 +17,7 @@ repository:
 			{include: "#sections"}
 			{include: "#copyright"}
 			{include: "#comment"}
+			{include: "#gaspTable"}
 			{include: "#property"}
 			{include: "#control"}
 			{include: "#address"}
@@ -65,6 +66,15 @@ repository:
 		endCaptures:
 			0: name: "punctuation.definition.string.end.sfd"
 		patterns: [match: "\\\\.", name: "constant.character.escape.sfd"]
+
+	gaspTable:
+		name: "meta.gasp-table.sfd"
+		begin: "^(GaspTable)(:|(?=\\s))"
+		end:   "$"
+		beginCaptures:
+			1: name: "variable.other.property.sfd"
+			2: name: "punctuation.separator.dictionary.key-value.sfd"
+		patterns: [include: "$self"]
 
 	header:
 		name: "meta.header.sfd"
