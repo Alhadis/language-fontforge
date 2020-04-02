@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 [Unpublished]
 ------------------------------------------------------------------------
-* Added support for comment-toggling in BDF files
+* Added support for comment-toggling in BDF and SFD files
 * Added `.ff` to supported FontForge script extensions
 * Fixed missing highlighting of BDF comments which precede `STARTFONT`
 

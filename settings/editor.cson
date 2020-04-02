@@ -1,8 +1,8 @@
-".source.fontforge":
+".text.sfd":
 	editor:
-		commentStart: "# "
+		commentStart: "UComments: "
 
-".source.opentype":
+".source.fontforge, .source.opentype, .source.figctrl":
 	editor:
 		commentStart: "# "
 
@@ -13,10 +13,6 @@
 ".source.bdf":
 	editor:
 		commentStart: "COMMENT "
-
-".source.figctrl":
-	editor:
-		commentStart: "# "
 
 ".source.fontdir":
 	editor:
