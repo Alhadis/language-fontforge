@@ -5,7 +5,7 @@ Adds syntax highlighting for several font-related text formats:
 
 * [Adobe font metrics][afm]: `.afm`
 * [FIGlet fonts and control files][fig]: `.flc`, `.flf`, `.tlf`
-* [FontForge's built-in scripting language][pe]: `.pe`
+* [FontForge's built-in scripting language][pe]: `.ff`, `.pe`
 * [Glyph bitmap distribution files][bdf]: `.bdf`
 * [OpenType feature files][fea]: `.fea`
 * [Spline font databases][sfd]: `.sfd`
@@ -36,5 +36,5 @@ Previews
 [dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
 [fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html
 [fig]: http://www.figlet.org/figlet-man.html
-[pe]:  http://fontforge.github.io/en-US/documentation/scripting/native/
-[sfd]: http://fontforge.github.io/en-US/documentation/developers/sfdformat/
+[pe]:  https://fontforge.org/docs/scripting/scripting.html
+[sfd]: https://fontforge.org/docs/techref/sfdformat.html
