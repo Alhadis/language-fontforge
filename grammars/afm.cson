@@ -2,7 +2,9 @@ name: "Adobe Font Metrics"
 scopeName: "source.afm"
 fileTypes: ["afm", "amfm", "acfm", "amm"]
 firstLineMatch: "\\AStart(?:Comp|Master)?FontMetrics\\s+(?:\\d+(?:\\.\\d+)?)\\s*$"
-maxTokensPerLine: 2048,
+foldStartPattern: "^Start([A-Z]\\w+)(?=\\s|$)"
+foldEndPattern:   "^End([A-Z]\\w+)(?=\\s|$)"
+maxTokensPerLine: 2048
 patterns: [
 	{include: "#resources"}
 	{include: "#main"}

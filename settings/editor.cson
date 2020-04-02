@@ -1,19 +1,31 @@
-".text.sfd":
-	editor:
-		commentStart: "UComments: "
-
-".source.fontforge, .source.opentype, .source.figctrl":
-	editor:
-		commentStart: "# "
-
 ".source.afm":
 	editor:
 		commentStart: "Comment "
+		foldStartPattern: "^Start([A-Z]\\w*)(?=\\s|$)"
+		foldEndPattern: "^End([A-Z]\\w*)(?=\\s|$)"
 
 ".source.bdf":
 	editor:
 		commentStart: "COMMENT "
 
+".source.figctrl":
+	editor:
+		commentStart: "# "
+
 ".source.fontdir":
 	editor:
 		commentStart: "! "
+
+".source.fontforge":
+	editor:
+		commentStart: "# "
+		increaseIndentPattern: "^\\s*((if|elseif|else)\\b(?!.*\\b(endif)\\b)|(while|foreach)\\b(?!.*\\b(endloop)\\b))"
+		decreaseIndentPattern: "^\\s*(endif|endloop)\\b$|^\\s*(elseif|else)$"
+
+".source.opentype":
+	editor:
+		commentStart: "# "
+
+".text.sfd":
+	editor:
+		commentStart: "UComments: "
