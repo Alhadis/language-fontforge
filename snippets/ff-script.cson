@@ -1,0 +1,104 @@
+".source.fontforge":
+
+	# Debugging
+	Error:
+		description: "Abort script with an error message"
+		prefix: "err"
+		body: 'Error($1)'
+
+	"Write to stdout":
+		prefix: "log"
+		body: 'Print($1)'
+
+	"Write to stderr":
+		prefix: "warn"
+		body: 'PostNotice($1)'
+
+
+
+	# Control flow
+	For:
+		description: "Moral equivalent of a C-style `for` loop"
+		prefix: "for"
+		body: """
+			i = ${3:0}
+			while(i < ${1:count})
+				$2
+				++i
+			endloop
+		"""
+
+	If:
+		description: "Standalone `if` block"
+		prefix: "if"
+		body: """
+			if(${1:condition})
+				$0
+			endif
+		"""
+	
+	"If…elseif":
+		description: "`if` block followed by `elseif`"
+		prefix: "ie"
+		body: """
+			if(${1:condition})
+				$2
+			elseif(${2:condition})
+				$3
+			endif
+			$0
+		"""
+
+	While:
+		description: "`while` loop"
+		prefix: "while"
+		body: """
+			while(${1:true})
+				$0
+			endloop
+		"""
+		
+
+
+	# String manipulation
+	
+	"Substitute all occurrences of string":
+		description: "Replace or delete every occurrence of a string within a variable"
+		prefix: "gsub"
+		body: """
+			while(~(i = Strstr(${1:name}, s = "${2:search}")))
+				${1:name} = Strsub(${1:name}, 0, i) + "${3:replacement}" + Strsub(${1:name}, i + Strlen(s))
+			endloop
+			$0
+		"""
+
+	"Substitute first occurrence of string":
+		description: "Replace or delete the first occurrence of a string"
+		prefix: "sub"
+		body: """
+			if(j = Strstr(${1:name}, s = "${2:search}"))
+				${1:name} = Strsub(${1:name}, 0, j + 1) + "${3:replacement}" + Strsub(${1:name}, j + Strlen(s))
+			endif
+		"""
+
+	"Substitute last occurrence of string":
+		description: "Replace or delete the last occurrence of a string"
+		prefix: "lsub"
+		body: """
+			if(j = Strrstr(${1:name}, s = "${2:search}"))
+				${1:name} = Strsub(${1:name}, 0, j + 1) + "${3:replacement}" + Strsub(${1:name}, j + Strlen(s))
+			endif
+		"""
+
+	Trim:
+		description: "Trim leading and trailing whitespace"
+		prefix: "trim"
+		body: """
+			while((l = Strlen(${1:var}) - 1) > -1)
+				if     (IsSpace(Strsub(${1:var}, 0, 1))) ${1:var} = Strsub(${1:var}, 1)
+				elseif (IsSpace(Strsub(${1:var}, l)))    ${1:var} = Strsub(${1:var}, 0, l)
+				else   break
+				endif
+			endloop
+			$0
+		"""
