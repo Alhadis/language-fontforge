@@ -19,8 +19,8 @@
 ".source.fontforge":
 	editor:
 		commentStart: "# "
-		increaseIndentPattern: "^\\s*((if|elseif|else)\\b(?!.*\\b(endif)\\b)|(while|foreach)\\b(?!.*\\b(endloop)\\b))"
-		decreaseIndentPattern: "^\\s*(endif|endloop)\\b$|^\\s*(elseif|else)$"
+		increaseIndentPattern: "(?:^|;)\\s*(?:(?:if|elseif|else)\\b(?!.*\\bendif\\b)|(?:while|foreach)\\b(?!.*\\bendloop\\b))"
+		decreaseIndentPattern: "(?:^|;)\\s*(?:elseif|else|endif|endloop)\\b$"
 
 ".source.opentype":
 	editor:
