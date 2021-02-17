@@ -1,7 +1,27 @@
 name: "FIGlet Control File"
 scopeName: "source.figctrl"
 fileTypes: ["flc"]
-firstLineMatch: "\\Aflc2a"
+firstLineMatch: """(?x)
+	# Magic number
+	\\Aflc2a
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:fig(?:let)?+[-_]?(?:cfg|config|conf|control|ctrl))
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:fig(?:let)?+[-_]?(?:cfg|config|conf|control|ctrl))
+		(?=\\s|:|$)
+	)
+"""
 patterns: [{
 	
 	# 5-byte magic number

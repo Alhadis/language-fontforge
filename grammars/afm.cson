@@ -1,7 +1,27 @@
 name: "Adobe Font Metrics"
 scopeName: "source.afm"
 fileTypes: ["afm", "amfm", "acfm", "amm"]
-firstLineMatch: "\\AStart(?:Comp|Master)?FontMetrics\\s+(?:\\d+(?:\\.\\d+)?)\\s*$"
+firstLineMatch: """(?x)
+	# Mandatory header directive
+	^Start(?:Comp|Master)?FontMetrics\\s+(?:\\d+(?:\\.\\d+)?)\\s*$
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:afm|adobe[-_]?font[-_]?metrics)
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:afm|adobe[-_]?font[-_]?metrics)
+		(?=\\s|:|$)
+	)
+"""
 foldStartPattern: "^Start([A-Z]\\w+)(?=\\s|$)"
 foldEndPattern:   "^End([A-Z]\\w+)(?=\\s|$)"
 maxTokensPerLine: 2048

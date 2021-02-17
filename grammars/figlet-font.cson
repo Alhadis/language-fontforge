@@ -1,7 +1,27 @@
 name: "FIGlet Font"
 scopeName: "source.figfont"
 fileTypes: ["flf", "tlf"]
-firstLineMatch: "\\Aflf2a"
+firstLineMatch: """(?x)
+	# Magic number
+	\\Aflf2a
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:fig(?:let)?+[-_]?(?:font|(?<=let)))
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:fig(?:let)?+[-_]?(?:font|(?<=let)))
+		(?=\\s|:|$)
+	)
+"""
 patterns: [include: "#main"]
 
 repository:

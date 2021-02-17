@@ -1,7 +1,28 @@
 name: "FontForge Script"
 scopeName: "source.fontforge"
 fileTypes: ["ff", "pe"]
-firstLineMatch: "/#!\\bfontforge\\b"
+firstLineMatch: """(?x)
+	# Hashbang
+	^\\#!.*?[/ ](?:fontforge|pfaedit)(?=\\s|$)\\b
+	(?!.*?[ \\t]-lang(?:=|\\s+)py)
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:fontforge|pfaedit)
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:fontforge|pfaedit)
+		(?=\\s|:|$)
+	)
+"""
 patterns: [include: "#main"]
 
 repository:

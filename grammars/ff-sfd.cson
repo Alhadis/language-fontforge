@@ -2,7 +2,27 @@
 name: "Spline Font Database"
 scopeName: "text.sfd"
 fileTypes: ["sfd"]
-firstLineMatch: "^SplineFontDB: [\\d.]+"
+firstLineMatch: """(?x)
+	# Version header
+	^SplineFontDB:\\ [\\d.]+
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:sfd|spline[-_]?font[-_]?(?:database|db))
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:sfd|spline[-_]?font[-_]?(?:database|db))
+		(?=\\s|:|$)
+	)
+"""
 patterns: [include: "#main"]
 
 repository:

@@ -1,6 +1,28 @@
 name: "OpenType Feature File"
 scopeName: "source.opentype"
 fileTypes: ["fea", "family"]
+firstLineMatch: """(?x)
+	# First line of “Fraction Fever”, a prominent example of an OpenType features list. Source:
+	# http://web.archive.org/web/20130325033504/http://talleming.com/2009/10/01/fraction-fever-2/
+	\\A\\s*@figures\\s+=\\s+\\\[\\r?\\n\\s*zero(?:$|\\s)
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:fea(?:tures?(?:[-_]?file)?)|opentype|otf)
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:fea(?:tures?(?:[-_]?file)?)|opentype|otf)
+		(?=\\s|:|$)
+	)
+"""
 patterns: [include: "#main"]
 
 repository:
