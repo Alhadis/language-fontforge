@@ -1,0 +1,137 @@
+# Grammar written based on adobe-type-tools/psautohint@315610c
+name: "Standard Bézier"
+scopeName: "source.stdbez"
+fileTypes: ["bez"]
+firstLineMatch: """(?x)
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:std|standard)[-_]?bez(?:ier)?
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			(?:std|standard)[-_]?bez(?:ier)?
+		(?=\\s|:|$)
+	)
+"""
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			{include: "#comment"}
+			{include: "#outline"}
+			{include: "#flex"}
+			{include: "#hint"}
+			{include: "#drawing"}
+			{include: "#number"}
+			{include: "#hints"}
+			{include: "#misc"}
+			{include: "#unknown"}
+		]
+
+
+	# % Comment
+	comment:
+		name:  "comment.line.percentage.stdbez"
+		begin: "%"
+		end:   "$"
+		beginCaptures:
+			0: name: "punctuation.definition.comment.stdbez"
+
+
+	# Graphics and motion commands
+	drawing:
+		name: "meta.drawing-operator.$1.stdbez"
+		match: """(?x)
+			(?:^|\\G|(?<=\\s))
+			( (cp)
+			| (ct)
+			| (dt)
+			| (mt)
+			| (rmt)
+			) (?=$|\\s|%)
+		"""
+		captures:
+			2: name: "keyword.operator.drawing.close-subpath.stdbez"   # Same as `closepath` (Type 1)
+			3: name: "keyword.operator.drawing.absolute.curve.stdbez"  # Same as `curveto`   (Type 1)
+			4: name: "keyword.operator.drawing.absolute.line.stdbez"   # Same as `lineto`    (Type 1)
+			5: name: "keyword.operator.drawing.absolute.motion.stdbez" # Same as `moveto`    (PostScript)
+			6: name: "keyword.operator.drawing.relative.motion.stdbez" # Same as `rmoveto`   (Type 1)
+
+
+	# Flex operator: `preflx1`…`preflx2`
+	flex:
+		name:  "meta.flex-operator.stdbez"
+		begin: "(?:^|\\G|(?<=\\s))preflx1(?=$|\\s|%)"
+		end:   "(?:^|\\G|(?<=\\s))preflx2(?=$|\\s|%)"
+		beginCaptures: 0: name: "keyword.control.flex.begin.stdbez"
+		endCaptures:   0: name: "keyword.control.flex.end.stdbez"
+		patterns: [include: "#main"]
+
+
+	# Hint-related operator
+	hint:
+		match: "meta.hint-operator.$1.stdbez"
+		match: """(?x)
+			(?:^|\\G|(?<=\\s))
+			( (rb)
+			| (rm)
+			| (rv)
+			| (ry)
+			) (?=$|\\s|%)
+		"""
+		captures:
+			2: name: "keyword.operator.hint.stem.horizontal.stdbez"
+			3: name: "keyword.operator.hint.stem.vertical.stdbez"
+			4: name: "keyword.operator.hint.counter.vertical.stdbez"
+			5: name: "keyword.operator.hint.counter.horizontal.stdbez"
+
+
+	# Block of hint values
+	hints:
+		name:  "meta.hints.stdbez"
+		begin: "(?:^|\\G|(?<=\\s))(beginsubr(?:\\s+snc)?)(?=\\s|$|%)"
+		end:   "(?:^|\\G|(?<=\\s))(endsubr(?:\\s+enc)?|newcolors)(?=\\s|$|%)"
+		beginCaptures: 1: name: "keyword.control.hints.begin.stdbez"
+		endCaptures:   1: name: "keyword.control.hints.end.stdbez"
+		patterns: [include: "#main"]
+
+
+	# Operators that don't fit anywhere else
+	misc:
+		patterns: [
+			{name: "keyword.operator.flex.$1.stdbez",    match: "(?:^|\\G|(?<=\\s))(fle?x)(?=$|\\s|%)"}
+			{name: "keyword.control.hints.begin.stdbez", match: "(?<=\\s|^)(?:snc)(?=\\s|$|%)"}
+			{name: "keyword.control.hints.end.stdbez",   match: "(?<=\\s|^)(?:enc|newcolors)(?=\\s|$|%)"}
+		]
+
+
+	# Numeric value
+	number:
+		patterns: [
+			{name:  "constant.numeric.decimal.float.stdbez",       match: "[-+]?\\d+\\.\\d+(?=$|\\s|%)"}
+			{name:  "constant.numeric.decimal.integer.int.stdbez", match: "[-+]?\\d+(?=$|\\s|%)"}
+		]
+
+
+	# Glyph outline
+	outline:
+		name:  "meta.glyph-outline.stdbez"
+		begin: "(?:^|\\G|(?<=\\s))sc(?=$|\\s|%)"
+		end:   "(?:^|\\G|(?<=\\s))ed(?=$|\\s|%)"
+		beginCaptures: 0: name: "keyword.control.outline.begin.stdbez"
+		endCaptures:   0: name: "keyword.control.outline.end.stdbez"
+		patterns: [include: "#main"]
+
+
+	# An operator we don't recognise
+	unknown:
+		name:  "invalid.unimplemented.unknown.operator.stdbez"
+		match: "(?:^|\\G|(?<=\\s))([a-z][a-z0-9]*)(?=$|\\s|%)"

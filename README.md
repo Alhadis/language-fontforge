@@ -4,6 +4,7 @@ Font-file language support
 Adds syntax highlighting for several font-related text formats:
 
 * [Adobe font metrics][afm]: `.afm`
+* [Standard Bézier][bez]: `.bez`
 * [FIGlet fonts and control files][fig]: `.flc`, `.flf`, `.tlf`
 * [FontForge's built-in scripting language][pe]: `.ff`, `.pe`
 * [Glyph bitmap distribution files][bdf]: `.bdf`
@@ -32,6 +33,7 @@ Previews
 
 [Referenced links]:_____________________________________________________________
 [afm]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
+[bez]: https://github.com/adobe-type-tools/psautohint/blob/c8ff588/doc/bezformat.md
 [bdf]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5005.BDF_Spec.pdf
 [dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
 [fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html

@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 [Unpublished]
 ------------------------------------------------------------------------
 * Added automatic indentation of FontForge keywords
+* Added grammar for Adobe's [Standard Bézier][bez] format
 * Added recognition of Vim and Emacs modelines
 * Added snippets for FontForge scripting
 * Added support for comment-toggling in BDF and SFD files
@@ -16,6 +17,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 * Fixed broken hashbang recognition in FontForge scripts
 * Fixed highlighting of SFD `GaspTable` fields without colons
 * Fixed missing highlighting of BDF comments which precede `STARTFONT`
+
+[bez]: https://github.com/adobe-type-tools/psautohint/blob/99e1cb862/doc/bezformat.md
 
 
 [v1.3.0]

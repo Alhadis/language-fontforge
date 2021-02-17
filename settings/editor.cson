@@ -8,6 +8,12 @@
 	editor:
 		commentStart: "COMMENT "
 
+".source.stdbez":
+	editor:
+		commentStart: "% "
+		foldStartPattern: "^\\s*(preflx1|sc|snc|beginsubr)(?=\\s|$)"
+		foldEndPattern:   "^\\s*(preflx2|ed|enc|endsubr)(?=\\s|$)"
+
 ".source.figctrl":
 	editor:
 		commentStart: "# "
