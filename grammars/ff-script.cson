@@ -153,7 +153,7 @@ repository:
 		
 	codepoint:
 		name: "constant.numeric.other.codepoint.fontforge"
-		match: "o[uU][A-Fa-f0-9]+"
+		match: "0[uU][A-Fa-f0-9]+"
 	
 	real:
 		name: "constant.numeric.float.fontforge"
