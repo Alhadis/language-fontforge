@@ -6,6 +6,7 @@ Adds syntax highlighting for several font-related text formats:
 * [Adobe font metrics][afm]: `.afm`
 * [Standard Bézier][bez]: `.bez`
 * [FIGlet fonts and control files][fig]: `.flc`, `.flf`, `.tlf`
+* [Fontinfo files][fd]: `fontinfo`
 * [FontForge's built-in scripting language][pe]: `.ff`, `.pe`
 * [Glyph bitmap distribution files][bdf]: `.bdf`
 * [OpenType feature files][fea]: `.fea`
@@ -38,5 +39,6 @@ Previews
 [dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
 [fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html
 [fig]: http://www.figlet.org/figlet-man.html
+[fd]:  https://github.com/adobe-type-tools/psautohint/blob/12bffdd/python/psautohint/fdTools.py
 [pe]:  https://fontforge.org/docs/scripting/scripting.html
 [sfd]: https://fontforge.org/docs/techref/sfdformat.html

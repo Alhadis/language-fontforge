@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 [Unpublished]
 ------------------------------------------------------------------------
 * Added automatic indentation of FontForge keywords
-* Added grammar for Adobe's [Standard Bézier][bez] format
+* Added grammars for [Standard Bézier][bez] and [Fontinfo][fd] files
 * Added recognition of Vim and Emacs modelines
 * Added snippets for FontForge scripting
 * Added support for comment-toggling in BDF and SFD files
@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 * Fixed missing highlighting of FontForge's Unicode codepoint literals
 
 [bez]: https://github.com/adobe-type-tools/psautohint/blob/99e1cb862/doc/bezformat.md
+[fd]: https://github.com/adobe-type-tools/psautohint/blob/12bffdd/python/psautohint/fdTools.py
 
 
 [v1.3.0]

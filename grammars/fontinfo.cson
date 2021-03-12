@@ -1,0 +1,161 @@
+# An AFM-like format used by Adobe's PSAutoHint tool
+name: "Fontinfo"
+scopeName: "source.fontinfo"
+fileTypes: ["fontinfo"]
+firstLineMatch: """(?x)
+	# Header common to several fixtures in PSAutoHint's test-suite
+	^IsItalicStyle\\s+(?:[\\[\\(]\\s*)?(?:false|true)\\b
+	|
+	
+	# Emacs modeline
+	-\\*-(?i:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+		(?i:fontinfo)
+	(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+	|
+	
+	# Vim modeline
+	(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+	(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+	(?:filetype|ft|syntax)\\s*=
+		(?i:fontinfo)
+	(?=\\s|:|$)
+"""
+limitLineLength: no
+maxTokensPerLine: 2048
+patterns: [include: "#main"]
+
+repository:
+	main:
+		patterns: [
+			{include: "#dict"}
+			{include: "#glyphSet"}
+			{include: "#property"}
+		]
+
+	dict:
+		name:  "meta.dictionary.fontinfo"
+		begin: "^\\s*(begin)\\s+(FDDict)\\s+(\\S+).*"
+		end:   "^\\s*(end)\\s+(FDDict)\\s+(?:(\\3)(?=\\s|$)|(\\S+))\\s*"
+		beginCaptures:
+			1: name: "keyword.control.scope.begin.fontinfo"
+			2: name: "storage.type.var.fontinfo"
+			3: name: "entity.name.dictionary.fontinfo"
+		endCaptures:
+			1: name: "keyword.control.scope.end.fontinfo"
+			2: name: "storage.type.var.fontinfo"
+			3: name: "entity.name.dictionary.fontinfo"
+			4: name: "invalid.illegal.unmatched-name.fontinfo"
+		patterns: [include: "#main"]
+
+	glyphSet:
+		name:  "meta.glyph-set.fontinfo"
+		begin: "^\\s*(begin)\\s+(GlyphSet)\\s+(\\S+).*"
+		end:   "^\\s*(end)\\s+(GlyphSet)(?:\\s+(?:(?:\\3)(?=\\s|$)|(\\S+)))?+.*"
+		beginCaptures:
+			1: name: "keyword.control.scope.begin.fontinfo"
+			2: name: "storage.type.var.fontinfo"
+			3: name: "entity.name.glyph-set.fontinfo"
+		endCaptures:
+			1: name: "keyword.control.scope.end.fontinfo"
+			2: name: "storage.type.var.fontinfo"
+			3: name: "entity.name.glyph-set.fontinfo"
+			4: name: "invalid.illegal.unmatched-name.fontinfo"
+		patterns: [{
+			match: "^[ \\t]*(\\S.*)"
+			captures: 1:
+				name: "string.regexp.fontinfo"
+				patterns: [include: "source.regexp", {
+					name: "constant.character.escape.backslash.fontinfo"
+					match: "\\."
+				},{
+					name:  "string.regexp.arbitrary-repitition"
+					match: "[*+?]"
+				},{
+					name:  "constant.other.character-class.set.regexp.fontinfo"
+					begin: "\\["
+					end:   "\\]|(?=\\s*$)"
+					beginCaptures: 0: name: "punctuation.definition.regexp.class.begin.fontinfo"
+					endCaptures:   0: name: "punctuation.definition.regexp.class.end.fontinfo"
+				}]
+		}]
+
+	property:
+		name:  "meta.property.$1.fontinfo"
+		begin: """(?x) ^\\s*
+			( (?:Baseline|Height)[56](?:Overshoot)?
+			| (?:Cap|Descender|Lc|Fig)(?:Height|Overshoot)
+			| (?:Ordinal|Superior)(?:Baseline|Overshoot)
+			| AscenderHeight
+			| AscenderOvershoot
+			| BaselineOvershoot
+			| BaselineYCoord
+			| BlueFuzz
+			| BlueValuesPairs
+			| BlueValues
+			| ConvertToCID
+			| DictName
+			| Dominant[HV]
+			| FlexOK
+			| FontName
+			| FullName
+			| [HV]CounterChars
+			| IsBoldStyle
+			| IsItalicStyle
+			| IsOS/2OBLIQUE
+			| IsOS/2WidthWeigthSlopeOnly
+			| LanguageGroup
+			| LicenseCode
+			| OrigEmSqUnits
+			| OtherBlueValuesPairs
+			| OtherBlues
+			| PreferOS/2TypoMetrics
+			| StemSnap[HV]
+			| UseOldNameID4
+			) (?=\\s|$)
+		"""
+		end: "$"
+		beginCaptures:
+			0: name: "meta.property.key.fontinfo"
+			1: name: "variable.assignment.fontinfo"
+		patterns: [include: "#value"]
+
+	value:
+		patterns: [{
+			# Boolean
+			name: "constant.language.boolean.$1.fontinfo"
+			match: "(?:\\G|\\s)(true|false)(?=\\s|$)"
+		},{
+			# Numbers
+			match: "(?:\\G|^|(?<=\\[|\\())((?:[ \\t]*[-+]?(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:[Ee][-+]?\\d+)?[ \\t]*)++)(?=$|\\]|\\))"
+			captures: 1: patterns: [
+				match: "\\S+"
+				name: "constant.numeric.fontinfo"
+			]
+		},{
+			# [Array]
+			name:  "meta.array.square-brackets.fontinfo"
+			begin: "\\G\\s*(\\[)"
+			end:   "([^\\]]*)(\\])|(?=\\s*$)"
+			beginCaptures:
+				1: name: "punctuation.definition.array.bracket.round.begin.fontinfo"
+			endCaptures:
+				1: patterns: [include: "#value"]
+				2: name: "punctuation.definition.array.bracket.round.end.fontinfo"
+			patterns: [include: "#value"]
+		},{
+			# (Array)
+			name:  "meta.array.round-brackets.fontinfo"
+			begin: "\\G\\s*(\\()"
+			end:   "([^\\)]*)(\\))|(?=\\s*$)"
+			beginCaptures:
+				1: name: "punctuation.definition.array.bracket.round.begin.fontinfo"
+			endCaptures:
+				1: patterns: [include: "#value"]
+				2: name: "punctuation.definition.array.bracket.round.end.fontinfo"
+			patterns: [include: "#value"]
+		},{
+			# Anything else
+			match: "(?:\\G|^|(?<=[\\[\\(\\s]))\\s*(?![\\[\\]\\(\\)])(\\S+)(?<!\\]|\\))"
+			captures:
+				1: name: "string.unquoted.fontinfo"
+		}]
