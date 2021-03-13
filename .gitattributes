@@ -1,2 +1,5 @@
+# Include CSON files in GitHub's language breakdown graph
+*.cson linguist-detectable
+
 # Exclude preview images from package tarballs
 *.png export-ignore
