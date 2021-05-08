@@ -67,14 +67,14 @@ repository:
 			patterns: [{
 				name: "keyword.operator.opentype"
 				match: "(?<=^|[\\s{};])sizemenuname(?=[\\s#;]|$)"
-			}, include: "$self"]
+			}, include: "#main"]
 		},{
 			
 			# Lookup
 			name: "meta.lookup.opentype"
 			begin: "(?<=^|[\\s{}])(lookup)\\s+((?![\\d.])[A-Za-z0-9._]+)(?:\\s+(useExtension))?\\s*({)"
 			end:   "(})\\s*(\\2)\\s*(?=[#;]|$)"
-			patterns: [include: "$self"]
+			patterns: [include: "#main"]
 			beginCaptures:
 				1: name: "storage.type.var.lookup.opentype"
 				2: name: "entity.name.lookup.opentype"
@@ -105,7 +105,7 @@ repository:
 					|TypoLineGap|winAscent|winDescent|UnicodeRange|CodePageRange|XHeight|CapHeight
 					|Vendor|VertTypoAscender|VertTypoDescender|VertTypoLineGap|VertOriginY|VertAdvanceY)
 					(?=[\\s#;]|$)"""
-			}, include: "$self"]
+			}, include: "#main"]
 		},{
 			# Anonymous data block
 			begin: "(?<=^|[\\s{};])(anonymous|anon)\\s+([\\w.]+)\\s*({)"
@@ -135,7 +135,7 @@ repository:
 				name: "meta.cv-param.$1.opentype"
 				begin: "(?<=^|[\\s{}])(FeatUILabelNameID|FeatUITooltipTextNameID|SampleTextNameID|ParamUILabelNameID)\\s*({)"
 				end:   "(})"
-				patterns: [include: "$self"]
+				patterns: [include: "#main"]
 				beginCaptures:
 					1: name: "keyword.operator.parameter.opentype"
 					2: name: "punctuation.section.bracket.curly.begin.opentype"
@@ -147,14 +147,14 @@ repository:
 				name: "keyword.operator.parameter.opentype"
 				match: "(?<=\\s|^)Character(?=\\s|$|#)"
 				
-			}, include: "$self"]
+			}, include: "#main"]
 		},{
 			
 			# Anything else
 			name: "meta.$1.opentype"
 			begin: "(?<=^|[\\s{}])(featureNames)\\s*({)"
 			end:   "(})"
-			patterns: [include: "$self"]
+			patterns: [include: "#main"]
 			beginCaptures:
 				1: name: "storage.type.var.opentype"
 				2: name: "punctuation.section.bracket.curly.begin.opentype"
