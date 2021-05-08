@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 * Fixed missing highlighting of BDF comments which precede `STARTFONT`
 * Fixed missing highlighting of FontForge's Unicode codepoint literals
 * Fixed [various inaccuracies][1] related to modeline matching
+* Improved tokenisation of FontForge procedure calls
 
 [bez]: https://github.com/adobe-type-tools/psautohint/blob/99e1cb862/doc/bezformat.md
 [fd]: https://github.com/adobe-type-tools/psautohint/blob/12bffdd/python/psautohint/fdTools.py

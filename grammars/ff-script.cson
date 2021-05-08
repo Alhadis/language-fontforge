@@ -108,8 +108,8 @@ repository:
 		}, include: "#lineContinuation"]
 
 	control:
-		name: "keyword.control.$1.fontforge"
-		match: "\\b(if|elseif|else|endif|while|endloop|foreach|break|return|shift)\\b"
+		name: "keyword.control.flow.$1.fontforge"
+		match: "(?<![$.@/])\\b(if|elseif|else|endif|while|endloop|foreach|break|return|shift)\\b(?![$.@/])"
 
 	operators:
 		patterns: [
@@ -128,16 +128,335 @@ repository:
 		]
 
 	procedureCall:
-		name: "meta.function-call.fontforge"
-		begin: "(\\w+)\\s*(\\()"
-		end:   "\\)"
-		contentName: "meta.function-call.arguments.fontforge"
-		beginCaptures:
-			1: name: "entity.name.function.fontforge"
-			2: name: "punctuation.definition.arguments.begin.bracket.round.fontforge"
-		endCaptures:
-			0: name: "punctuation.definition.arguments.end.bracket.round.fontforge"
-		patterns: [include: "#main"]
+		patterns: [{
+			# Built-in procedures
+			name: "meta.function-call.builtin.fontforge"
+			begin: "(?x) (?<![$.@/]) \\b
+				( ATan2
+				| AddAccent
+				| AddAnchorClass
+				| AddAnchorPoint
+				| AddDHint
+				| AddExtrema
+				| AddHHint
+				| AddInstrs
+				| AddLookupSubtable
+				| AddLookup
+				| AddPosSub
+				| AddSizeFeature
+				| AddVHint
+				| ApplySubstitution
+				| Array
+				| AskUser
+				| AutoCounter
+				| AutoHint
+				| AutoInstr
+				| AutoKern
+				| AutoTrace
+				| AutoWidth
+				| BitmapsAvail
+				| BitmapsRegen
+				| BuildAccented
+				| BuildComposite
+				| BuildDuplicate
+				| CIDChangeSubFont
+				| CIDFlattenByCMap
+				| CIDFlatten
+				| CIDSetFontNames
+				| CanonicalContours
+				| CanonicalStart
+				| Ceil
+				| CenterInWidth
+				| ChangePrivateEntry
+				| ChangeWeight
+				| CharCnt
+				| CheckForAnchorClass
+				| Chr
+				| ClearBackground
+				| ClearGlyphCounterMasks
+				| ClearHints
+				| ClearInstrs
+				| ClearPrivateEntry
+				| ClearTable
+				| Clear
+				| Close
+				| CompareFonts
+				| CompareGlyphs
+				| ConvertByCMap
+				| ConvertToCID
+				| CopyAnchors
+				| CopyFgToBg
+				| CopyLBearing
+				| CopyRBearing
+				| CopyReference
+				| CopyUnlinked
+				| CopyVWidth
+				| CopyWidth
+				| Copy
+				| CorrectDirection
+				| Cos
+				| Cut
+				| DefaultOtherSubrs
+				| DefaultRoundToGrid
+				| DefaultUseMyMetrics
+				| DetachAndRemoveGlyphs
+				| DetachGlyphs
+				| DontAutoHint
+				| DrawsSomething
+				| Error
+				| ExpandStroke
+				| Export
+				| Exp
+				| FileAccess
+				| FindIntersections
+				| FindOrAddCvtIndex
+				| Floor
+				| FontImage
+				| FontsInFile
+				| GenerateFamily
+				| GenerateFeatureFile
+				| Generate
+				| GetAnchorPoints
+				| GetCvtAt
+				| GetEnv
+				| GetFontBoundingBox
+				| GetLookupInfo
+				| GetLookupOfSubtable
+				| GetLookupSubtables
+				| GetLookups
+				| GetMaxpValue
+				| GetOS2Value
+				| GetPosSub
+				| GetPref
+				| GetPrivateEntry
+				| GetSubtableOfAnchor
+				| GetTTFName
+				| GetTeXParam
+				| GlyphInfo
+				| HFlip
+				| HasPreservedTable
+				| HasPrivateEntry
+				| Import
+				| InFont
+				| Inline
+				| InterpolateFonts
+				| Int
+				| IsAlNum
+				| IsAlpha
+				| IsDigit
+				| IsFinite
+				| IsFraction
+				| IsHexDigit
+				| IsLigature
+				| IsLower
+				| IsNan
+				| IsOtherFraction
+				| IsSpace
+				| IsUpper
+				| IsVulgarFraction
+				| Italic
+				| Join
+				| LoadEncodingFile
+				| LoadNamelistDir
+				| LoadNamelist
+				| LoadPrefs
+				| LoadStringFromFile
+				| LoadTableFromFile
+				| Log
+				| LookupSetFeatureList
+				| LookupStoreLigatureInAfm
+				| MMAxisBounds
+				| MMAxisNames
+				| MMBlendToNewFont
+				| MMChangeInstance
+				| MMChangeWeight
+				| MMInstanceNames
+				| MMWeightedName
+				| MergeFeature
+				| MergeFonts
+				| MergeKern
+				| MergeLookupSubtables
+				| MergeLookups
+				| MoveReference
+				| Move
+				| MultipleEncodingsToReferences
+				| NameFromUnicode
+				| NearlyHvCps
+				| NearlyHvLines
+				| NearlyLines
+				| New
+				| NonLinearTransform
+				| Open
+				| Ord
+				| Outline
+				| OverlapIntersect
+				| PasteWithOffset
+				| Paste
+				| PositionReference
+				| PostNotice
+				| Pow
+				| PreloadCidmap
+				| PrintFont
+				| PrintSetup
+				| Print
+				| Quit
+				| Rand
+				| ReadOtherSubrsFile
+				| Real
+				| Reencode
+				| RemoveAllKerns
+				| RemoveAllVKerns
+				| RemoveAnchorClass
+				| RemoveDetachedGlyphs
+				| RemoveLookupSubtable
+				| RemoveLookup
+				| RemoveOverlap
+				| RemovePosSub
+				| RemovePreservedTable
+				| RenameGlyphs
+				| ReplaceCvtAt
+				| ReplaceGlyphCounterMasks
+				| ReplaceWithReference
+				| RevertToBackup
+				| Revert
+				| Rotate
+				| RoundToCluster
+				| RoundToInt
+				| Round
+				| SameGlyphAs
+				| SavePrefs
+				| SaveTableToFile
+				| Save
+				| ScaleToEm
+				| Scale
+				| SelectAllInstancesOf
+				| SelectAll
+				| SelectBitmap
+				| SelectByPosSub
+				| SelectChanged
+				| SelectFewerSingletons
+				| SelectFewer
+				| SelectGlyphsBoth
+				| SelectGlyphsReferences
+				| SelectGlyphsSplines
+				| SelectHintingNeeded
+				| SelectIf
+				| SelectInvert
+				| SelectMoreIf
+				| SelectMoreSingletonsIf
+				| SelectMoreSingletons
+				| SelectMore
+				| SelectNone
+				| SelectSingletonsIf
+				| SelectSingletons
+				| SelectWorthOutputting
+				| Select
+				| SetCharCnt
+				| SetFondName
+				| SetFontHasVerticalMetrics
+				| SetFontNames
+				| SetFontOrder
+				| SetGasp
+				| SetGlyphChanged
+				| SetGlyphClass
+				| SetGlyphColor
+				| SetGlyphComment
+				| SetGlyphCounterMask
+				| SetGlyphName
+				| SetGlyphTeX
+				| SetItalicAngle
+				| SetKern
+				| SetLBearing
+				| SetMacStyle
+				| SetMaxpValue
+				| SetOS2Value
+				| SetPanose
+				| SetPref
+				| SetRBearing
+				| SetTTFName
+				| SetTeXParams
+				| SetUnicodeValue
+				| SetUniqueID
+				| SetVKern
+				| SetVWidth
+				| SetWidth
+				| Shadow
+				| Simplify
+				| Sin
+				| SizeOf
+				| Skew
+				| SmallCaps
+				| Sqrt
+				| StrJoin
+				| StrSplit
+				| Strcasecmp
+				| Strcasestr
+				| Strftime
+				| Strlen
+				| Strrstr
+				| Strskipint
+				| Strstr
+				| Strsub
+				| Strtod
+				| Strtol
+				| SubstitutionPoints
+				| Tan
+				| ToLower
+				| ToMirror
+				| ToString
+				| ToUpper
+				| Transform
+				| TypeOf
+				| UCodePoint
+				| Ucs4
+				| UnicodeFromName
+				| UnlinkReference
+				| Utf8
+				| VFlip
+				| VKernFromHKern
+				| Wireframe
+				| WorthOutputting
+				| WriteStringToFile
+				) \\s* (\\()"
+			end: "\\)"
+			beginCaptures:
+				1: name: "support.function.built-in.fontforge"
+				2: name: "punctuation.definition.arguments.bracket.round.begin.fontforge"
+			endCaptures:
+				0: name: "punctuation.definition.arguments.bracket.round.begin.fontforge"
+			contentName: "meta.function-call.arguments.fontforge"
+			patterns: [include: "#main"]
+		},{
+			# User-defined
+			name:  "meta.function-call.user-defined.fontforge"
+			begin: "(?:(?<![$.@/])\\b((?!\\.?\\d)[A-Za-z$_.\\d@/]+)|(?<=['\"\\)]))\\s*(\\()"
+			end:   "\\)"
+			beginCaptures:
+				1: name: "entity.name.function.fontforge"
+				2: name: "punctuation.definition.arguments.bracket.round.begin.fontforge"
+			endCaptures:
+				0: name: "punctuation.definition.arguments.bracket.round.end.fontforge"
+			contentName: "meta.function-call.arguments.fontforge"
+			patterns: [include: "#main"]
+		},{
+			# Indirect/dynamic
+			name: "meta.function-call.indirect.fontforge"
+			match: """(?x)
+				(?:^|(?<!\\*/|['"\\)A-Za-z$_.\\d@/])
+				(?<=\\S))
+				\\s* (\\()
+				( "[^"]*+"
+				| '[^']*+'
+				| (?!["']) [^\\(\\)]* [^\\s\\(\\)]+ [^\\(\\)]*
+				) (\\))
+				(?=\\s*\\()
+			"""
+			captures:
+				0: name: "meta.expression.fontforge"
+				1: name: "punctuation.bracket.begin.round.fontforge"
+				2: patterns: [include: "#main"]
+				3: name: "punctuation.bracket.end.round.fontforge"
+		}]
 	
 	punctuation:
 		patterns: [
