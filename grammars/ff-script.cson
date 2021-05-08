@@ -38,6 +38,7 @@ repository:
 			{include: "#procedureCall"}
 			{include: "#punctuation"}
 			{include: "#variables"}
+			{include: "#lineContinuation"}
 		]
 	
 	comments:
