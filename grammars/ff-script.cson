@@ -47,6 +47,7 @@ repository:
 			end:   "$"
 			beginCaptures:
 				0: name: "punctuation.definition.comment.fontforge"
+			patterns: [include: "#lineContinuation"]
 		},{
 			name: "comment.block.fontforge"
 			begin: "/\\*"
@@ -59,7 +60,16 @@ repository:
 			end:   "$"
 			beginCaptures:
 				0: name: "punctuation.definition.comment.fontforge"
+			patterns: [include: "#lineContinuation"]
 		}]
+
+
+	# Line ending with a backslash
+	lineContinuation:
+		begin: "(\\\\)$\\s*"
+		end:   "^"
+		beginCaptures:
+			1: name: "constant.character.escape.line-continuation.fontforge"
 
 
 	# Bundled group imported by SFD grammar
@@ -92,10 +102,10 @@ repository:
 		}]
 
 	stringEscapes:
-		patterns: [
+		patterns: [{
 			name: "constant.character.escape.newline.fontforge"
 			match: "\\\\n"
-		]
+		}, include: "#lineContinuation"]
 
 	control:
 		name: "keyword.control.$1.fontforge"

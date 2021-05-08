@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 * Added recognition of Vim and Emacs modelines
 * Added snippets for FontForge scripting
 * Added support for comment-toggling in BDF and SFD files
+* Added support for line-continuation in FontForge scripts
 * Added `.ff` to supported FontForge script extensions
 * Fixed broken hashbang recognition in FontForge scripts
 * Fixed highlighting of SFD `GaspTable` fields without colons
