@@ -1,0 +1,7 @@
+// Hide form-feeds in section markers; they're prominent enough already
+body.ff-style-border .syntax--source.syntax--fontforge{
+	.syntax--comment.syntax--line.syntax--number-sign.syntax--fontforge:first-child >
+	.syntax--punctuation.syntax--whitespace.syntax--leading.syntax--unpadded.syntax--form-feed{
+		display: none;
+	}
+}
