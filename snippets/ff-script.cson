@@ -1,4 +1,18 @@
 ".source.fontforge":
+	
+	Hashbang:
+		prefix: "ff"
+		body: "#!/usr/bin/env fontforge\n\n$0"
+	
+	Dirname:
+		description: "Directory containing current file"
+		prefix: "dir"
+		body: '\\$0:h + "/$1"'
+	
+	Subroutine:
+		description: "Resolve path to a user-defined subroutine"
+		prefix: "sub"
+		body: '${1:subroutine} = \\$0:h + "/${1:subroutine}.ff"'
 
 	# Debugging
 	Error:
@@ -25,6 +39,17 @@
 			while(i < ${1:count})
 				$2
 				++i
+			endloop
+		"""
+
+	Each:
+		description: "Iterate over an array"
+		prefix: "each"
+		body: """
+			${3:i} = 0
+			while(${3:i} < SizeOf(${1:array}))
+				entry = ${1:array}[${3:i}++]
+				$2
 			endloop
 		"""
 
