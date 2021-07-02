@@ -3,11 +3,12 @@ Change-log
 
 This project adheres to [Semantic Versioning](http://semver.org).
 
-[Unpublished]: ../../compare/v1.3.0...HEAD
+[Unpublished]: ../../compare/v1.4.0...HEAD
 
 
-[Unpublished]
+[v1.4.0]
 ------------------------------------------------------------------------
+**July 2nd, 2021**  
 * Added automatic indentation of FontForge keywords
 * Added grammars for [Standard Bézier][bez] and [Fontinfo][fd] files
 * Added recognition of Vim and Emacs modelines
@@ -66,6 +67,7 @@ Initial release. Adds syntax highlighting for FontForge scripts.
 
 
 [Referenced links]:_____________________________________________________
+[v1.4.0]: https://github.com/Alhadis/language-fontforge/releases/v1.4.0
 [v1.3.0]: https://github.com/Alhadis/language-fontforge/releases/v1.3.0
 [v1.2.0]: https://github.com/Alhadis/language-fontforge/releases/v1.2.0
 [v1.1.1]: https://github.com/Alhadis/language-fontforge/releases/v1.1.1
