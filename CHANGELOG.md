@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 [Unpublished]: ../../compare/v1.4.0...HEAD
 
 
+[Unpublished]
+------------------------------------------------------------------------
+* Disabled OpenType ligatures in [XLFD] strings
+
+[XLFD]: https://x.org/archive/X11R7.6/doc/xorg-docs/specs/XLFD/xlfd.pdf
+
+
 [v1.4.0]
 ------------------------------------------------------------------------
 **July 2nd, 2021**  
