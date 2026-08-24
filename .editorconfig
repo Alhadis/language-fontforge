@@ -6,4 +6,19 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = false
 indent_style = tab
+spelling_language = en-AU
+
+[*.{yaml,yml}]
+indent_style = space
 indent_size = 4
+
+[{COMMIT_EDITMSG,MERGE_MSG}]
+trim_trailing_whitespace = true
+max_line_length = 72
+indent_style = space
+indent_size = 4
+
+[{LICENSE,README}.md]
+max_line_length = 80
+indent_size = 4
+tab_width = 4
