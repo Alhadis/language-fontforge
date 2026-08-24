@@ -1,5 +1,8 @@
+<!--*- coding: utf-8; fill-column: 80; truncate-lines: t; -*-
+vim:se noet lbr tw=80 sts=0 sw=4 ts=4 nowrap: -->
+
 Font-file language support
-==========================
+================================================================================
 
 Adds syntax highlighting for several font-related text formats:
 
@@ -11,7 +14,7 @@ Adds syntax highlighting for several font-related text formats:
 * [Glyph bitmap distribution files][bdf]: `.bdf`
 * [OpenType feature files][fea]: `.fea`
 * [Spline font databases][sfd]: `.sfd`
-* [X font directory lists][dir]: `fonts.dir`, `fonts.scale`, `fonts.alias`, `encodings.dir`
+* [X font directory lists][dir]: `fonts.{dir,scale,alias}`, `encodings.dir`
 
 Originally, only FontForge scripts were supported (hence the package's name).
 Over time, additional formats were added which were considered too niche to
@@ -20,25 +23,28 @@ for highlighting their respective formats. Others may be added in the future.
 
 
 Previews
---------
+--------------------------------------------------------------------------------
 
 > FontForge's scripting language:
-![Highlighted `.pe` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-1.png)
+![Highlighted `.pe` file][p1]
 
 > OpenType feature files:
-![Highlighted `.fea` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-2.png)
+![Highlighted `.fea` file][p2]
 
 > Adobe font metrics:
-![Highlighted `.afm` file](https://raw.githubusercontent.com/Alhadis/language-fontforge/master/prev-3.png)
+![Highlighted `.afm` file][p3]
 
 
-[Referenced links]:_____________________________________________________________
-[afm]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5004.AFM_Spec.pdf
-[bez]: https://github.com/adobe-type-tools/psautohint/blob/c8ff588/doc/bezformat.md
-[bdf]: https://adobe.com/content/dam/Adobe/en/devnet/font/pdfs/5005.BDF_Spec.pdf
+<!-- Referenced links --------------------------------------------------------->
+[afm]: https://adobe-type-tools.github.io/font-tech-notes/pdfs/5004.AFM_Spec.pdf
+[bez]: https://github.com/adobe-type-tools/psautohint/blob/HEAD/doc/bezformat.md
+[bdf]: https://adobe-type-tools.github.io/font-tech-notes/pdfs/5005.BDF_Spec.pdf
 [dir]: https://www.x.org/archive/X11R7.5/doc/man/man1/mkfontdir.1.html
-[fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html
+[fea]: https://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification
 [fig]: http://www.figlet.org/figlet-man.html
-[fd]:  https://github.com/adobe-type-tools/psautohint/blob/12bffdd/python/psautohint/fdTools.py
+[fd]:  https://adobe-type-tools.github.io/afdko/MakeOTFUserGuide#fontinfo
 [pe]:  https://fontforge.org/docs/scripting/scripting.html
 [sfd]: https://fontforge.org/docs/techref/sfdformat.html
+[p1]:  https://github.com/Alhadis/language-fontforge/raw/36ff453/prev-1.png
+[p2]:  https://github.com/Alhadis/language-fontforge/raw/36ff453/prev-2.png
+[p3]:  https://github.com/Alhadis/language-fontforge/raw/36ff453/prev-3.png
